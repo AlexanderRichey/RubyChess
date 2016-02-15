@@ -17,7 +17,7 @@ class Pawn < Piece
   end
 
   def move_dirs
-    output = [[direction, 0]]
+    output = [[direction, 0], [direction, -1], [direction, 1]]
 
     output << [(direction * 2), 0] if @first_move
 
@@ -31,7 +31,7 @@ class Pawn < Piece
       current_row, current_col = pos
       possible_pos = [(current_row += d_row), (current_col += d_col)]
 
-      if @board.in_bounds?(possible_pos) && @board.valid?(pos, possible_pos)
+      if @board.in_bounds?(possible_pos) && @board.valid_pawn_move?(pos, possible_pos)
         output << possible_pos
         # caputurability
       end
