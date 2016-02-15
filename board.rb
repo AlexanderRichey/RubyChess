@@ -22,19 +22,37 @@ class Board
   end
 
   def populate_board #place pieces
-    self[[0, 0]] = Piece.new
+    self[[0, 3]] = Queen.new(self, [0, 3]) # black
+    self[[0, 2]] = Bishop.new(self, [0, 2])
+    self[[0, 5]] = Bishop.new(self, [0, 5])
+    self[[0, 0]] = Rook.new(self, [0,0])
+    self[[0, 7]] = Rook.new(self, [0,7])
+
+    self[[7, 3]] = Queen.new(self, [7, 3]) # white
+    self[[7, 2]] = Bishop.new(self, [7, 2])
+    self[[7, 5]] = Bishop.new(self, [7, 5])
+    self[[7, 0]] = Rook.new(self, [7,0])
+    self[[7, 7]] = Rook.new(self, [7,7])
   end
 
   def move(start, end_pos)
+    # Check to see if there as a piece to be selected
     if self[start].nil?
       raise BoardError.new("No chess-piece there.")
     end
 
-    # error for invalid move
-
+    # Grab piece
     piece = self[start]
+
+    # Check whether piece moves that way
+    unless piece.valid_moves.include?(end_pos)
+      raise BoardError.new("Invalid move.")
+    end
+
+    # Reset start, update positions on board AND piece
     self[start] = nil
     self[end_pos] = piece
+    piece.pos = end_pos
   end
 
   def in_bounds?(pos)
@@ -43,5 +61,9 @@ class Board
     end
 
     true
+  end
+
+  def open?(pos)
+    self[pos].nil? ? true : false
   end
 end

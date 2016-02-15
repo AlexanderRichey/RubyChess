@@ -24,13 +24,15 @@ class Display
   def row_display(row, row_idx)
     row_display = ""
 
-    row.each_with_index do |space, col_idx|
+    row.each_with_index do |piece, col_idx|
       if @cursor_pos == [row_idx, col_idx]
         row_display << " X "
-      elsif space.nil?
+      elsif piece.nil?
         row_display << " . "
+      elsif @selected == [row_idx, col_idx]
+        row_display << piece.symbol.colorize(:red)
       else
-        row_display << " P "
+        row_display << piece.symbol
       end
     end
 
@@ -39,8 +41,14 @@ class Display
 
   def pick_up(pos)
     if @selected
-      @board.move(@selected, pos)
-      @selected = false
+      begin
+        @board.move(@selected, pos)
+      rescue BoardError => e
+        puts e.message
+        sleep(1)
+      ensure
+        @selected = false
+      end
     else
       @selected = pos
     end
