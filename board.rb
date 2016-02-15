@@ -5,11 +5,9 @@ end
 class Board
   attr_reader :board, :game
 
-  def initialize(game)
+  def initialize(game, board = (Array.new(8) { Array.new(8) }))
     @game = game
-    @board = Array.new(8) { Array.new(8) }
-
-    populate_board
+    @board = board
   end
 
   def [](pos)
@@ -73,12 +71,41 @@ class Board
     end
 
     # Reset start, update positions on board AND piece
+    check_check(start, end_pos)
     self[start] = nil
     self[end_pos] = piece
     piece.pos = end_pos
 
     game.switch_players!
   end
+
+  def check_check(start, end_pos)
+    start_piece = self[start]
+    end_piece = self[end_pos]
+
+    self[start] = nil
+    self[end_pos] = start_piece
+    start_piece.pos = end_pos
+
+    if in_check?(game.current_player)
+      self[start] = start_piece
+      self[end_pos] = end_piece
+      start_piece.pos = start
+      raise BoardError.new("Can't move into check.")
+    end
+  end
+
+  # def check_check(start, end_pos)
+  #   # duplicated_board = @board.deep_dup
+  #   duplicated_board = Board.new(board)
+  #   piece = duplicated_board[start]
+  #   duplicated_board[start] = nil
+  #   duplicated_board[end_pos] = piece
+  #   piece.pos = end_pos
+  #
+  #   raise BoardError.new("Can't move into check.") if duplicated_board.in_check?(game.current_player)
+  #
+  # end
 
   def in_bounds?(pos)
     pos.each do |coord|
@@ -120,5 +147,34 @@ class Board
     col -= d_col
 
     return row.abs == 1 && col.abs == 1
+  end
+
+  def in_check?(color)
+    board.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+
+        moves = piece.valid_moves
+        moves.each do |coord|
+          return true if self[coord].is_a?(King) && self[coord].color == color
+        end
+      end
+    end
+
+    false
+  end
+end
+
+class Array
+  def deep_dup
+    self.inject([]) do |dup, el|
+      if el.nil?
+        dup << el
+      elsif el.is_a?(Array)
+        dup << el.deep_dup
+      else
+        dup << el.clone
+      end
+    end
   end
 end

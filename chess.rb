@@ -29,6 +29,7 @@ class Game
 
   def play
     b = Board.new(self)
+    b.populate_board
     d = Display.new(b)
     d.display_loop
   end
