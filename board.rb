@@ -85,7 +85,16 @@ class Board
     true
   end
 
-  def open?(pos)
-    self[pos].nil? ? true : false
+  def valid?(pos, possible_pos)
+    if self[possible_pos].nil?
+      return true
+    elsif self[possible_pos].color == self[pos].opponent_color
+      return true
+    else
+      return false
+    end
   end
+
+
+
 end

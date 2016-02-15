@@ -31,7 +31,7 @@ class Pawn < Piece
       current_row, current_col = pos
       possible_pos = [(current_row += d_row), (current_col += d_col)]
 
-      if @board.in_bounds?(possible_pos) && @board.open?(possible_pos)
+      if @board.in_bounds?(possible_pos) && @board.valid?(pos, possible_pos)
         output << possible_pos
         # caputurability
       end
