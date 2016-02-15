@@ -1,10 +1,8 @@
-require 'byebug'
-
 class Pawn < Piece
   attr_reader :direction
 
-  def initialize(board, pos, direction)
-    super(board, pos)
+  def initialize(board, pos, direction, color)
+    super(board, pos, color)
     @first_move = true
     @direction = direction
   end

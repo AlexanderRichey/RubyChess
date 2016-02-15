@@ -16,6 +16,5 @@ require_relative 'pawn'
 
 b = Board.new
 d = Display.new(b)
-q = Queen.new(b, [1, 1])
 
 d.display_loop

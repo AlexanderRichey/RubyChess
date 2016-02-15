@@ -32,7 +32,7 @@ class Display
       elsif @selected == [row_idx, col_idx]
         row_display << piece.symbol.colorize(:red)
       else
-        row_display << piece.symbol
+        row_display << piece.symbol.colorize(piece.display_color)
       end
     end
 
