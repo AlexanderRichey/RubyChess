@@ -12,6 +12,7 @@ require_relative 'rook'
 require_relative 'stepping_piece'
 require_relative 'knight'
 require_relative 'king'
+require_relative 'pawn'
 
 b = Board.new
 d = Display.new(b)
