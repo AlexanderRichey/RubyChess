@@ -36,4 +36,12 @@ class Board
     self[start] = nil
     self[end_pos] = piece
   end
+
+  def in_bounds?(pos)
+    pos.each do |coord|
+      return false if coord < 0 || coord >= @board.length
+    end
+
+    true
+  end
 end
