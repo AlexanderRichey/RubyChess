@@ -14,7 +14,25 @@ require_relative 'knight'
 require_relative 'king'
 require_relative 'pawn'
 
-b = Board.new
-d = Display.new(b)
+class Game
+  attr_reader :white, :black, :current_player
 
-d.display_loop
+  def initialize(white, black)
+    @white = :white
+    @black = :black
+    @current_player = :white
+  end
+
+  def switch_players!
+    @current_player == white ? @current_player = black : @current_player = white
+  end
+
+  def play
+    b = Board.new(self)
+    d = Display.new(b)
+    d.display_loop
+  end
+end
+
+g = Game.new("Alex", "Dan")
+g.play

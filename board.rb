@@ -3,9 +3,10 @@ class BoardError < StandardError
 end
 
 class Board
-  attr_reader :board
+  attr_reader :board, :game
 
-  def initialize
+  def initialize(game)
+    @game = game
     @board = Array.new(8) { Array.new(8) }
 
     populate_board
@@ -75,6 +76,8 @@ class Board
     self[start] = nil
     self[end_pos] = piece
     piece.pos = end_pos
+
+    game.switch_players!
   end
 
   def in_bounds?(pos)
@@ -86,6 +89,8 @@ class Board
   end
 
   def valid?(pos, possible_pos)
+    return false if self[pos].color != game.current_player
+
     if self[possible_pos].nil?
       return true
     elsif self[possible_pos].color == self[pos].opponent_color
@@ -96,6 +101,8 @@ class Board
   end
 
   def valid_pawn_move?(pos, possible_pos)
+    return false if self[pos].color != game.current_player
+
     if self[possible_pos].nil?
       return !diagonal_move?(pos, possible_pos)
     elsif self[possible_pos].color == self[pos].opponent_color && diagonal_move?(pos, possible_pos)

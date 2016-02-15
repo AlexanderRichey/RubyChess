@@ -1,4 +1,5 @@
 class Display
+  attr_reader :board
   include Cursorable
 
   def initialize(board)
@@ -19,6 +20,7 @@ class Display
     @board.board.each_with_index do |row, idx|
       puts row_display(row, idx)
     end
+    puts "#{board.game.current_player}'s turn"
   end
 
   def row_display(row, row_idx)
