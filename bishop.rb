@@ -1,6 +1,6 @@
 class Bishop < SlidingPiece
   def symbol
-    " B "
+    " ♝ "
   end
 
   def move_dirs

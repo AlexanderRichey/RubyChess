@@ -1,6 +1,6 @@
 class King < SteppingPiece
   def symbol
-    " K "
+    " ♚ "
   end
 
   def move_dirs

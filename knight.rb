@@ -1,6 +1,6 @@
 class Knight < SteppingPiece
   def symbol
-    " k "
+    " ♞ "
   end
 
   def move_dirs

@@ -1,6 +1,6 @@
 class Queen < SlidingPiece
   def symbol
-    " Q "
+    " ♛ "
   end
 
   def move_dirs

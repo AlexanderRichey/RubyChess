@@ -1,6 +1,6 @@
 class Rook < SlidingPiece
   def symbol
-    " R "
+    " ♜ "
   end
 
   def move_dirs
