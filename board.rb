@@ -49,25 +49,30 @@ class Board
 
   def move(start, end_pos)
     # Check to see if there as a piece to be selected
-    if self[start].nil?
-      raise BoardError.new("No chess-piece there.")
-    end
+    raise BoardError.new("No chess-piece there.") if self[start].nil?
 
     # Grab piece
     piece = self[start]
 
     # Check whether piece moves that way
-    unless piece.valid_moves.include?(end_pos)
-      raise BoardError.new("Invalid move.")
-    end
+    raise BoardError.new("Invalid move.") unless piece.valid_moves.include?(end_pos)
 
-    # Reset start, update positions on board AND piece
     check_check(start, end_pos)
-    self[start] = nil
-    self[end_pos] = piece
-    piece.pos = end_pos
+    make_move(start, end_pos, piece)
 
     game.switch_players!
+  end
+
+  def make_move(start_pos, end_pos, piece)
+    self[start_pos] = nil
+    self[end_pos] = piece
+    piece.pos = end_pos
+  end
+
+  def undo_move(start_pos, end_pos, start_piece, end_piece)
+    self[start_pos] = start_piece
+    self[end_pos] = end_piece
+    start_piece.pos = start_pos
   end
 
   def check_check(start, end_pos, just_checking = false)
@@ -76,14 +81,11 @@ class Board
 
     previous_check = in_check?(game.current_player)
 
-    self[start] = nil
-    self[end_pos] = start_piece
-    start_piece.pos = end_pos
+    make_move(start, end_pos, start_piece)
 
     if in_check?(game.current_player)
-      self[start] = start_piece
-      self[end_pos] = end_piece
-      start_piece.pos = start
+      undo_move(start, end_pos, start_piece, end_piece)
+
       if previous_check
         raise BoardError.new("Must move out of check.")
       else
@@ -91,12 +93,9 @@ class Board
       end
     end
 
-    if just_checking
-      self[start] = start_piece
-      self[end_pos] = end_piece
-      start_piece.pos = start
-      return false
-    end
+    undo_move(start, end_pos, start_piece, end_piece) if just_checking
+
+    false
   end
 
   def checkmate?
