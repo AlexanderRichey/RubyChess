@@ -11,7 +11,7 @@ class SteppingPiece < Piece
       current_row, current_col = pos
       possible_pos = [(current_row += d_row), (current_col += d_col)]
 
-      if @board.in_bounds?(possible_pos) && @board.valid?(pos, possible_pos, all_moves)
+      if @board.in_bounds?(possible_pos) && valid?(pos, possible_pos, all_moves)
         output << possible_pos
       end
     end

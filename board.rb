@@ -125,44 +125,6 @@ class Board
     true
   end
 
-  def valid?(pos, possible_pos, all_moves)
-    unless all_moves
-      return false if self[pos].color != game.current_player
-    end
-
-    if self[possible_pos].nil?
-        return true
-      elsif self[possible_pos].color == self[pos].opponent_color
-        return true
-      else
-        return false
-      end
-  end
-
-  def valid_pawn_move?(pos, possible_pos, all_moves)
-    unless all_moves
-      return false if self[pos].color != game.current_player
-    end
-
-    if self[possible_pos].nil?
-      return !diagonal_move?(pos, possible_pos)
-    elsif self[possible_pos].color == self[pos].opponent_color && diagonal_move?(pos, possible_pos)
-      return true
-    else
-      return false
-    end
-  end
-
-  def diagonal_move?(org_pos, des_pos)
-    row, col = org_pos
-    d_row, d_col = des_pos
-
-    row -= d_row
-    col -= d_col
-
-    return row.abs == 1 && col.abs == 1
-  end
-
   def in_check?(color)
     board.each do |row|
       row.each do |piece|

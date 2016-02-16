@@ -16,4 +16,18 @@ class Piece
     @color == :white ? :white : :blue
   end
 
+  def valid?(pos, possible_pos, all_moves)
+    unless all_moves
+      return false if @board[pos].color != @board.game.current_player
+    end
+
+    if @board[possible_pos].nil?
+        return true
+      elsif @board[possible_pos].color == @board[pos].opponent_color
+        return true
+      else
+        return false
+      end
+  end
+
 end
