@@ -1,18 +1,4 @@
-require 'io/console'
-require_relative 'board'
-require_relative 'piece'
-require 'colorize'
-require_relative 'cursorable'
-require_relative 'display'
-require_relative 'piece'
-require_relative 'sliding_piece'
-require_relative 'queen'
-require_relative 'bishop'
-require_relative 'rook'
-require_relative 'stepping_piece'
-require_relative 'knight'
-require_relative 'king'
-require_relative 'pawn'
+require_relative 'relatives'
 
 class Game
   attr_reader :white, :black, :current_player
