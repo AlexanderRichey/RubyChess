@@ -8,7 +8,7 @@ class Game
     @display = Display.new(@board)
 
     @player_one = HumanPlayer.new(@display, :white)
-    @player_two = HumanPlayer.new(@display, :black)
+    @player_two = ComputerPlayer.new(@display, :black)
 
     @current_player = player_one
   end

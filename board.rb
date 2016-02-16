@@ -80,8 +80,6 @@ class Board
     false
   end
 
-  private
-
   def check_check(start, end_pos, just_checking = false)
     start_piece = self[start]
     end_piece = self[end_pos]
@@ -104,6 +102,8 @@ class Board
 
     false
   end
+
+  private
 
   def make_move(start_pos, end_pos, piece)
     self[start_pos] = nil

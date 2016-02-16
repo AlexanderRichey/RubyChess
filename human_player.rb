@@ -1,6 +1,6 @@
 class HumanPlayer
   attr_reader :color
-  
+
   def initialize(display, color)
     @display = display
     @color = color
