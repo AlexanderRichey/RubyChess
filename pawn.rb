@@ -11,16 +11,12 @@ class Pawn < Piece
     " P "
   end
 
-  def pos=(value)
-    @pos = value
-  end
-
   def move_dirs
     output = [[direction, 0], [direction, -1], [direction, 1]]
 
     output << [(direction * 2), 0] if @pos == @original_position
 
-    output += capturable_spaces # capturable_spaces return [] when no capturable_spaces
+    output
   end
 
   def valid_moves(all_moves = false)
@@ -61,9 +57,4 @@ class Pawn < Piece
 
     return row.abs == 1 && col.abs == 1
   end
-
-  def capturable_spaces
-    []
-  end
-
 end
