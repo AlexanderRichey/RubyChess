@@ -21,39 +21,30 @@ class Board
   end
 
   def populate_board #place pieces
-    self[[0, 4]] = King.new(self, [0, 4], :black)
-    self[[0, 3]] = Queen.new(self, [0, 3], :black) # black
-    self[[0, 2]] = Bishop.new(self, [0, 2], :black)
-    self[[0, 5]] = Bishop.new(self, [0, 5], :black)
-    self[[0, 0]] = Rook.new(self, [0,0], :black)
-    self[[0, 7]] = Rook.new(self, [0,7], :black)
-    self[[0, 1]] = Knight.new(self, [0, 1], :black)
-    self[[0, 6]] = Knight.new(self, [0, 6], :black)
-    self[[1, 0]] = Pawn.new(self, [1, 0], 1, :black)
-    self[[1, 1]] = Pawn.new(self, [1, 1], 1, :black)
-    self[[1, 2]] = Pawn.new(self, [1, 2], 1, :black)
-    self[[1, 3]] = Pawn.new(self, [1, 3], 1, :black)
-    self[[1, 4]] = Pawn.new(self, [1, 4], 1, :black)
-    self[[1, 5]] = Pawn.new(self, [1, 5], 1, :black)
-    self[[1, 6]] = Pawn.new(self, [1, 6], 1, :black)
-    self[[1, 7]] = Pawn.new(self, [1, 7], 1, :black)
+    populate_back_row(0, :black)
+    populate_pawns(1, :black)
 
-    self[[7, 4]] = King.new(self, [7, 4], :white)
-    self[[7, 3]] = Queen.new(self, [7, 3], :white) # white
-    self[[7, 2]] = Bishop.new(self, [7, 2], :white)
-    self[[7, 5]] = Bishop.new(self, [7, 5], :white)
-    self[[7, 0]] = Rook.new(self, [7,0], :white)
-    self[[7, 7]] = Rook.new(self, [7,7], :white)
-    self[[7, 1]] = Knight.new(self, [7, 1], :white)
-    self[[7, 6]] = Knight.new(self, [7, 6], :white)
-    self[[6, 0]] = Pawn.new(self, [6, 0], -1, :white)
-    self[[6, 1]] = Pawn.new(self, [6, 1], -1, :white)
-    self[[6, 2]] = Pawn.new(self, [6, 2], -1, :white)
-    self[[6, 3]] = Pawn.new(self, [6, 3], -1, :white)
-    self[[6, 4]] = Pawn.new(self, [6, 4], -1, :white)
-    self[[6, 5]] = Pawn.new(self, [6, 5], -1, :white)
-    self[[6, 6]] = Pawn.new(self, [6, 6], -1, :white)
-    self[[6, 7]] = Pawn.new(self, [6, 7], -1, :white)
+    populate_back_row(7, :white)
+    populate_pawns(6, :white)
+  end
+
+  def populate_back_row(row, color)
+    self[[row, 4]] = King.new(self, [row, 4], color)
+    self[[row, 3]] = Queen.new(self, [row, 3], color)
+    self[[row, 2]] = Bishop.new(self, [row, 2], color)
+    self[[row, 5]] = Bishop.new(self, [row, 5], color)
+    self[[row, 0]] = Rook.new(self, [row,0], color)
+    self[[row, 7]] = Rook.new(self, [row,7], color)
+    self[[row, 1]] = Knight.new(self, [row, 1], color)
+    self[[row, 6]] = Knight.new(self, [row, 6], color)
+  end
+
+  def populate_pawns(row, color)
+    direction = (color == :white ? -1 : 1)
+
+    8.times do |col|
+      self[[row, col]] = Pawn.new(self, [row, col], direction, color)
+    end
   end
 
   def move(start, end_pos)
