@@ -13,7 +13,7 @@ class Piece
   end
 
   def display_color
-    @color == :white ? :white : :blue
+    @color == :white ? :light_black : :black
   end
 
   def valid?(pos, possible_pos, all_moves)

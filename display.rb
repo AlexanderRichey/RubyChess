@@ -8,6 +8,17 @@ class Display
     @selected = false
   end
 
+  def colors_for(i, j, color)
+    if [i, j] == @cursor_pos
+      bg = :light_red
+    elsif (i + j).odd?
+      bg = :default
+    else
+      bg = :light_white
+    end
+    { background: bg, color: color }
+  end
+
   def render
     @board.board.each_with_index do |row, idx|
       puts row_display(row, idx)
@@ -20,14 +31,12 @@ class Display
     row_display = ""
 
     row.each_with_index do |piece, col_idx|
-      if @cursor_pos == [row_idx, col_idx]
-        row_display << " X "
-      elsif piece.nil?
-        row_display << " . "
+      if piece.nil?
+        row_display << "   ".colorize(colors_for(row_idx, col_idx, :white))
       elsif @selected == [row_idx, col_idx]
-        row_display << piece.symbol.colorize(:red)
+        row_display << piece.symbol.colorize(colors_for(row_idx, col_idx, :red))
       else
-        row_display << piece.symbol.colorize(piece.display_color)
+        row_display << piece.symbol.colorize(colors_for(row_idx, col_idx, piece.display_color))
       end
     end
 
