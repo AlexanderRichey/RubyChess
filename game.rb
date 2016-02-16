@@ -4,7 +4,11 @@ class Game
   attr_reader :current_player, :player_one, :player_two
 
   def initialize(board = nil)
-    @board ||= Board.new(self)
+    board ||= Board.new(self)
+
+    @board = board
+    @board.game = self # board.game is not the same when loading from a YAML.
+
     @display = Display.new(@board)
 
     @player_one = HumanPlayer.new(@display, :white)

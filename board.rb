@@ -4,6 +4,7 @@ end
 
 class Board
   attr_reader :board, :game
+  attr_accessor :game
 
   def initialize(game, board = (Array.new(8) { Array.new(8) }))
     @game = game
