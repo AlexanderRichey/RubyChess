@@ -9,11 +9,12 @@ class Display
   end
 
   def display_loop
-    loop do
+    until board.checkmate?
       system("clear")
       render
       get_input
     end
+    puts "CHECKMATE"
   end
 
   def render
@@ -21,6 +22,7 @@ class Display
       puts row_display(row, idx)
     end
     puts "#{board.game.current_player}'s turn"
+    puts "Check" if @board.in_check?(board.game.current_player)
   end
 
   def row_display(row, row_idx)

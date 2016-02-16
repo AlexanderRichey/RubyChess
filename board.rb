@@ -79,9 +79,11 @@ class Board
     game.switch_players!
   end
 
-  def check_check(start, end_pos)
+  def check_check(start, end_pos, just_checking = false)
     start_piece = self[start]
     end_piece = self[end_pos]
+
+    previous_check = in_check?(game.current_player)
 
     self[start] = nil
     self[end_pos] = start_piece
@@ -91,21 +93,39 @@ class Board
       self[start] = start_piece
       self[end_pos] = end_piece
       start_piece.pos = start
-      raise BoardError.new("Can't move into check.")
+      if previous_check
+        raise BoardError.new("Must move out of check.")
+      else
+        raise BoardError.new("Can't move into check.")
+      end
+    end
+
+    if just_checking
+      self[start] = start_piece
+      self[end_pos] = end_piece
+      start_piece.pos = start
+      return false
     end
   end
 
-  # def check_check(start, end_pos)
-  #   # duplicated_board = @board.deep_dup
-  #   duplicated_board = Board.new(board)
-  #   piece = duplicated_board[start]
-  #   duplicated_board[start] = nil
-  #   duplicated_board[end_pos] = piece
-  #   piece.pos = end_pos
-  #
-  #   raise BoardError.new("Can't move into check.") if duplicated_board.in_check?(game.current_player)
-  #
-  # end
+  def checkmate?
+    checkmate = true
+
+    @board.each do |row|
+      row.each do |piece|
+        if piece.is_a?(Piece)
+          piece.valid_moves.each do |move|
+            begin
+              checkmate = false unless check_check(piece.pos, move, true)
+            rescue BoardError
+            end
+          end
+        end
+      end
+    end
+
+    checkmate
+  end
 
   def in_bounds?(pos)
     pos.each do |coord|
@@ -115,20 +135,24 @@ class Board
     true
   end
 
-  def valid?(pos, possible_pos)
-    return false if self[pos].color != game.current_player
+  def valid?(pos, possible_pos, all_moves)
+    unless all_moves
+      return false if self[pos].color != game.current_player
+    end
 
     if self[possible_pos].nil?
-      return true
-    elsif self[possible_pos].color == self[pos].opponent_color
-      return true
-    else
-      return false
-    end
+        return true
+      elsif self[possible_pos].color == self[pos].opponent_color
+        return true
+      else
+        return false
+      end
   end
 
-  def valid_pawn_move?(pos, possible_pos)
-    return false if self[pos].color != game.current_player
+  def valid_pawn_move?(pos, possible_pos, all_moves)
+    unless all_moves
+      return false if self[pos].color != game.current_player
+    end
 
     if self[possible_pos].nil?
       return !diagonal_move?(pos, possible_pos)
@@ -154,7 +178,7 @@ class Board
       row.each do |piece|
         next if piece.nil?
 
-        moves = piece.valid_moves
+        moves = piece.valid_moves(true)
         moves.each do |coord|
           return true if self[coord].is_a?(King) && self[coord].color == color
         end
@@ -162,19 +186,5 @@ class Board
     end
 
     false
-  end
-end
-
-class Array
-  def deep_dup
-    self.inject([]) do |dup, el|
-      if el.nil?
-        dup << el
-      elsif el.is_a?(Array)
-        dup << el.deep_dup
-      else
-        dup << el.clone
-      end
-    end
   end
 end
