@@ -15,7 +15,6 @@ class Game
 
   def run
     @board = Board.new(self)
-    @board.populate_board
     @display = Display.new(@board)
     play
   end

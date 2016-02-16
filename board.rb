@@ -8,6 +8,7 @@ class Board
   def initialize(game, board = (Array.new(8) { Array.new(8) }))
     @game = game
     @board = board
+    populate_board
   end
 
   def [](pos)
