@@ -6,7 +6,8 @@ module Cursorable
     "\e[B" => :down,
     "\e[C" => :right,
     "\e[D" => :left,
-    "\u0003" => :ctrl_c
+    "\u0003" => :ctrl_c,
+    "s" => :save
   }
 
   MOVES = {
@@ -30,6 +31,8 @@ module Cursorable
     when :left, :right, :up, :down
       update_pos(MOVES[key])
       nil
+    when :save
+      @board.game.save_game
     else
       puts key
     end
