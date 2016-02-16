@@ -25,7 +25,8 @@ class Game
       @display.render
       @display.get_input
     end
-    puts "CHECKMATE"
+    switch_players!
+    puts "Checkmate! #{current_player.capitalize} wins!"
   end
 end
 
