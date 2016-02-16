@@ -8,6 +8,16 @@ class Display
     @selected = false
   end
 
+  def render
+    @board.board.each_with_index do |row, idx|
+      puts row_display(row, idx)
+    end
+    puts "#{board.game.current_player.capitalize}'s turn"
+    puts "#{board.game.current_player.capitalize} is in check" if @board.in_check?(board.game.current_player)
+  end
+
+  private
+
   def colors_for(i, j, color)
     if [i, j] == @cursor_pos
       bg = :light_red
@@ -19,12 +29,19 @@ class Display
     { background: bg, color: color }
   end
 
-  def render
-    @board.board.each_with_index do |row, idx|
-      puts row_display(row, idx)
+  def pick_up(pos)
+    if @selected
+      begin
+        @board.move(@selected, pos)
+      rescue BoardError => e
+        puts e.message
+        sleep(1)
+      ensure
+        @selected = false
+      end
+    else
+      @selected = pos
     end
-    puts "#{board.game.current_player.capitalize}'s turn"
-    puts "#{board.game.current_player.capitalize} is in check" if @board.in_check?(board.game.current_player)
   end
 
   def row_display(row, row_idx)
@@ -41,20 +58,5 @@ class Display
     end
 
     row_display
-  end
-
-  def pick_up(pos)
-    if @selected
-      begin
-        @board.move(@selected, pos)
-      rescue BoardError => e
-        puts e.message
-        sleep(1)
-      ensure
-        @selected = false
-      end
-    else
-      @selected = pos
-    end
   end
 end

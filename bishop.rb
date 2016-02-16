@@ -3,6 +3,8 @@ class Bishop < SlidingPiece
     " ♝ "
   end
 
+  private
+  
   def move_dirs
     return [[-1, -1],
             [-1, 1],

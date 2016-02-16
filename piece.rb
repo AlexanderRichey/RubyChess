@@ -8,10 +8,6 @@ class Piece
     @color = color
   end
 
-  def opponent_color
-    @color == :white ? :black : :white
-  end
-
   def display_color
     @color == :white ? :light_black : :black
   end
@@ -30,4 +26,9 @@ class Piece
       end
   end
 
+  protected
+
+  def opponent_color
+    @color == :white ? :black : :white
+  end
 end

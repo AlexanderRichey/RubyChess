@@ -3,6 +3,8 @@ class Knight < SteppingPiece
     " ♞ "
   end
 
+  private
+
   def move_dirs
     return [[-1, 2],
             [1, 2],

@@ -5,7 +5,6 @@ class SlidingPiece < Piece
   end
 
   def valid_moves(all_moves = false)
-
     output = []
 
     move_dirs.each do |(d_row, d_col)|

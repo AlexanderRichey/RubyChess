@@ -11,14 +11,6 @@ class Pawn < Piece
     " ♟ "
   end
 
-  def move_dirs
-    output = [[direction, 0], [direction, -1], [direction, 1]]
-
-    output << [(direction * 2), 0] if @pos == @original_position
-
-    output
-  end
-
   def valid_moves(all_moves = false)
     output = []
 
@@ -48,6 +40,8 @@ class Pawn < Piece
     end
   end
 
+  private
+
   def diagonal_move?(org_pos, des_pos)
     row, col = org_pos
     d_row, d_col = des_pos
@@ -56,5 +50,13 @@ class Pawn < Piece
     col -= d_col
 
     return row.abs == 1 && col.abs == 1
+  end
+
+  def move_dirs
+    output = [[direction, 0], [direction, -1], [direction, 1]]
+
+    output << [(direction * 2), 0] if @pos == @original_position
+
+    output
   end
 end
