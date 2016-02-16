@@ -14,7 +14,7 @@ class Piece
 
   def valid?(pos, possible_pos, all_moves)
     unless all_moves
-      return false if @board[pos].color != @board.game.current_player
+      return false if @board[pos].color != @board.game.current_player.color
     end
 
     if @board[possible_pos].nil?

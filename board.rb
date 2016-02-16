@@ -8,6 +8,7 @@ class Board
   def initialize(game, board = (Array.new(8) { Array.new(8) }))
     @game = game
     @board = board
+
     populate_board
   end
 
@@ -85,11 +86,11 @@ class Board
     start_piece = self[start]
     end_piece = self[end_pos]
 
-    previous_check = in_check?(game.current_player)
+    previous_check = in_check?(game.current_player.color)
 
     make_move(start, end_pos, start_piece)
 
-    if in_check?(game.current_player)
+    if in_check?(game.current_player.color)
       undo_move(start, end_pos, start_piece, end_piece)
 
       if previous_check

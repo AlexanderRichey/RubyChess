@@ -12,8 +12,8 @@ class Display
     @board.board.each_with_index do |row, idx|
       puts row_display(row, idx)
     end
-    puts "#{board.game.current_player.capitalize}'s turn"
-    puts "#{board.game.current_player.capitalize} is in check" if @board.in_check?(board.game.current_player)
+    puts "#{board.game.current_player.to_s.capitalize}'s turn"
+    puts "#{board.game.current_player.to_s.capitalize} is in check" if @board.in_check?(board.game.current_player.color)
   end
 
   private

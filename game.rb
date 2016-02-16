@@ -1,16 +1,19 @@
 require_relative 'relatives'
 
 class Game
-  attr_reader :current_player
+  attr_reader :current_player, :player_one, :player_two
 
   def initialize(board = nil)
-    @board = board
-    @current_player = :white
+    @board ||= Board.new(self)
+    @display = Display.new(@board)
+
+    @player_one = HumanPlayer.new(@display, :white)
+    @player_two = HumanPlayer.new(@display, :black)
+
+    @current_player = player_one
   end
 
   def run
-    @board ||= Board.new(self)
-    @display = Display.new(@board)
     play
   end
 
@@ -22,17 +25,17 @@ class Game
   end
 
   def switch_players!
-    @current_player == :white ? @current_player = :black : @current_player = :white
+    @current_player == player_one ? @current_player = player_two : @current_player = player_one
   end
 
   def play
     until @board.checkmate?
       system("clear")
       @display.render
-      @display.get_input
+      current_player.make_a_move
     end
     switch_players!
-    puts "Checkmate! #{current_player.capitalize} wins!"
+    puts "Checkmate! #{current_player.to_s.capitalize} wins!"
   end
 end
 
