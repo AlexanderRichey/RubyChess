@@ -8,15 +8,6 @@ class Display
     @selected = false
   end
 
-  def display_loop
-    until board.checkmate?
-      system("clear")
-      render
-      get_input
-    end
-    puts "CHECKMATE"
-  end
-
   def render
     @board.board.each_with_index do |row, idx|
       puts row_display(row, idx)

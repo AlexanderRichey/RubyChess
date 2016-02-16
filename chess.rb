@@ -3,7 +3,7 @@ require_relative 'relatives'
 class Game
   attr_reader :white, :black, :current_player
 
-  def initialize(white, black)
+  def initialize
     @white = :white
     @black = :black
     @current_player = :white
@@ -13,13 +13,22 @@ class Game
     @current_player == white ? @current_player = black : @current_player = white
   end
 
+  def run
+    @board = Board.new(self)
+    @board.populate_board
+    @display = Display.new(@board)
+    play
+  end
+
   def play
-    b = Board.new(self)
-    b.populate_board
-    d = Display.new(b)
-    d.display_loop
+    until @board.checkmate?
+      system("clear")
+      @display.render
+      @display.get_input
+    end
+    puts "CHECKMATE"
   end
 end
 
-g = Game.new("Alex", "Dan")
-g.play
+g = Game.new
+g.run
