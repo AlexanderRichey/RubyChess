@@ -4,7 +4,7 @@ Chess, coded in Ruby, playable in terminal.
 
 ## To Do
 
-[ ] Add AI and stuff...
+- [ ] Add AI and stuff...
 
 ## Screenshot
 
