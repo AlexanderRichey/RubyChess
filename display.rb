@@ -20,11 +20,11 @@ class Display
 
   def colors_for(i, j, color)
     if [i, j] == @cursor_pos
-      bg = :light_red
+      bg = :light_green
     elsif (i + j).odd?
-      bg = :default
+      bg = :magenta
     else
-      bg = :light_white
+      bg = :light_blue
     end
     { background: bg, color: color }
   end
@@ -51,7 +51,7 @@ class Display
       if piece.nil?
         row_display << "   ".colorize(colors_for(row_idx, col_idx, :white))
       elsif @selected == [row_idx, col_idx]
-        row_display << piece.symbol.colorize(colors_for(row_idx, col_idx, :red))
+        row_display << piece.symbol.colorize(colors_for(row_idx, col_idx, :green))
       else
         row_display << piece.symbol.colorize(colors_for(row_idx, col_idx, piece.display_color))
       end
