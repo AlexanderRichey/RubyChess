@@ -5,22 +5,26 @@ class Evaluator
 
   attr_reader :board, :color
 
+  START_VALUE = 39
+
   def evaluate
-    pieces_value + position_value
+    material_value
   end
 
-  def pieces_value
+  def material_value
     score = 0
-
     board.pieces(color).each do |piece|
       score += piece.value
     end
 
+    opp_score = 0
     board.pieces(opponent_color(color)).each do |piece|
-      score -= piece.value
+      opp_score += piece.value
     end
 
-    score
+    opp_diff = START_VALUE - opp_score
+
+    score + opp_diff
   end
 
   def position_value

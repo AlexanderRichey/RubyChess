@@ -5,7 +5,7 @@ class ComputerPlayer
     start_time: nil,
     end_time: nil,
     diff: nil,
-    counter: 0
+    evaluations: 0
   }
 
   SIGN = {
@@ -13,7 +13,7 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 4
+  MAX_DEPTH = 3
 
   def initialize(display, color)
     @board = display.board
@@ -25,18 +25,17 @@ class ComputerPlayer
   end
 
   def stats
-    "Completed #{STATS[:counter]} evaluations in #{STATS[:diff]} seconds."
+    "Completed #{STATS[:evaluations]} evaluations in #{STATS[:diff]} seconds."
   end
 
-  def log_stats!(score)
+  def log_stats!
     File.open('log.txt', 'a') do |log|
       log.puts stats
-      log.puts "The winning score was #{score}."
     end
   end
 
   def make_a_move(&prc)
-    STATS[:counter] = 0
+    STATS[:evaluations] = 0
     STATS[:start_time] = Time.now
 
     best_move = negamax(
@@ -44,32 +43,21 @@ class ComputerPlayer
       0,
       SIGN[color],
       -Float::INFINITY,
-      Float::INFINITY
+      Float::INFINITY,
+      nil,
+      nil
     )
 
     STATS[:end_time] = Time.now
     STATS[:diff] = STATS[:end_time] - STATS[:start_time]
 
     board.move(best_move[:start_pos], best_move[:end_pos])
-    log_stats!(best_move[:score])
+    log_stats!
 
     prc.call
   end
 
   private
-  def log_score!(score)
-    File.open('log.txt', 'a') do |log|
-      log.puts "Eval ##{STATS[:counter]} => #{score}"
-    end
-  end
-
-  def log_board_score!(score)
-    File.open('log.txt', 'a') do |log|
-      log.puts "Board Score => #{score}"
-    end
-
-    score
-  end
 
   def sign_to_sym(sign)
     inverse_sign_map = {
@@ -80,58 +68,59 @@ class ComputerPlayer
     inverse_sign_map[sign.to_s.to_sym]
   end
 
-  def negamax(board_node, depth, sign, alpha, beta)
-    if depth > MAX_DEPTH
-      return sign * board_node.score(sign_to_sym(sign))
+
+  def negamax(board_node, depth, sign, alpha, beta, init_start_pos, init_end_pos)
+    if depth == MAX_DEPTH
+      return {
+        score: board_node.score(sign_to_sym(sign)),
+        start_pos: init_start_pos,
+        end_pos: init_end_pos
+      }
     end
 
-    node = nil
+    alpha_start_pos, alpha_end_pos = nil, nil
 
     board_node.valid_moves(sign_to_sym(sign)).each do |piece, moves|
       moves.each do |end_pos|
-
         start_pos = piece.pos
+
         duped_board = board_node.deep_dup
         duped_piece = duped_board[start_pos]
         duped_board.make_move(start_pos, end_pos, duped_piece)
 
-        evaluation = negamax(
+        negamax_node = negamax(
           duped_board,
           depth + 1,
-          sign * -1,
-          alpha * -1,
-          beta * -1
+          (sign * -1),
+          (alpha * 1),
+          (beta * 1),
+          start_pos,
+          end_pos
         )
 
-        STATS[:counter] += 1
+        STATS[:evaluations] += 1
 
-        if evaluation.is_a?(Hash)
-          score = evaluation[:score] * -1
-        else
-          score = evaluation * -1
-        end
-
-        if score >= beta
+        if negamax_node[:score] >= beta
           return {
-              score: score,
-              start_pos: start_pos,
-              end_pos: end_pos
-            }
-        end
-
-        if score > alpha
-          alpha = score
-          node = {
-            score: alpha,
+            score: beta,
             start_pos: start_pos,
             end_pos: end_pos
           }
         end
 
+        if negamax_node[:score] > alpha
+          alpha = negamax_node[:score]
+          alpha_start_pos = start_pos
+          alpha_end_pos = end_pos
+        end
+
       end
     end
 
-    return node || alpha
+    return {
+      score: alpha,
+      start_pos: alpha_start_pos || init_start_pos,
+      end_pos: alpha_end_pos || init_end_pos
+    }
   end
-
 end

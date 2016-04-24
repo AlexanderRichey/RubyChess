@@ -5,7 +5,7 @@ class ComputerPlayer
     start_time: nil,
     end_time: nil,
     diff: nil,
-    counter: 0
+    evaluations: 0
   }
 
   SIGN = {
@@ -13,7 +13,7 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 4
+  MAX_DEPTH = 2
 
   def initialize(display, color)
     @board = display.board
@@ -25,33 +25,30 @@ class ComputerPlayer
   end
 
   def stats
-    "Completed #{STATS[:counter]} evaluations in #{STATS[:diff]} seconds."
+    "Completed #{STATS[:evaluations]} evaluations in #{STATS[:diff]} seconds."
   end
 
-  def log_stats!(score)
+  def log_stats!
     File.open('log.txt', 'a') do |log|
       log.puts stats
-      log.puts "The winning score was #{score}."
     end
   end
 
   def make_a_move(&prc)
-    STATS[:counter] = 0
+    STATS[:evaluations] = 0
     STATS[:start_time] = Time.now
 
     best_move = negamax(
       board,
       0,
-      SIGN[color],
-      -Float::INFINITY,
-      Float::INFINITY
+      SIGN[color]
     )
 
     STATS[:end_time] = Time.now
     STATS[:diff] = STATS[:end_time] - STATS[:start_time]
 
     board.move(best_move[:start_pos], best_move[:end_pos])
-    log_stats!(best_move[:score])
+    log_stats!
 
     prc.call
   end
@@ -63,9 +60,9 @@ class ComputerPlayer
     end
   end
 
-  def log_board_score!(score)
+  def log_board_score!(depth, score)
     File.open('log.txt', 'a') do |log|
-      log.puts "Board Score => #{score}"
+      log.puts "Board Score => #{score}, Depth => #{depth}"
     end
 
     score
@@ -80,11 +77,12 @@ class ComputerPlayer
     inverse_sign_map[sign.to_s.to_sym]
   end
 
-  def negamax(board_node, depth, sign, alpha, beta)
+  def negamax(board_node, depth, sign)
     if depth > MAX_DEPTH
       return sign * board_node.score(sign_to_sym(sign))
     end
 
+    max = -Float::INFINITY
     node = nil
 
     board_node.valid_moves(sign_to_sym(sign)).each do |piece, moves|
@@ -98,12 +96,10 @@ class ComputerPlayer
         evaluation = negamax(
           duped_board,
           depth + 1,
-          sign * -1,
-          alpha * -1,
-          beta * -1
+          sign * -1
         )
 
-        STATS[:counter] += 1
+        STATS[:evaluations] += 1
 
         if evaluation.is_a?(Hash)
           score = evaluation[:score] * -1
@@ -111,18 +107,12 @@ class ComputerPlayer
           score = evaluation * -1
         end
 
-        if score >= beta
-          return {
-              score: score,
-              start_pos: start_pos,
-              end_pos: end_pos
-            }
-        end
+        log_board_score!(depth, score)
 
-        if score > alpha
-          alpha = score
+        if score > max
+          max = score
           node = {
-            score: alpha,
+            score: max,
             start_pos: start_pos,
             end_pos: end_pos
           }
@@ -131,7 +121,7 @@ class ComputerPlayer
       end
     end
 
-    return node || alpha
+    return node || max
   end
 
 end

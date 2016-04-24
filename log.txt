@@ -1,97 +1,58 @@
-Completed 11000 evaluations in 6.941586 seconds.
-Completed 18611 evaluations in 12.042467 seconds.
-Completed 20839 evaluations in 13.973931 seconds.
-Completed 24301 evaluations in 16.627073 seconds.
-Completed 21292 evaluations in 14.588987 seconds.
-Completed 25431 evaluations in 17.546962 seconds.
-Completed 1911 evaluations in 1.166804 seconds.
-Completed 22518 evaluations in 14.382777 seconds.
-Completed 16759 evaluations in 10.235588 seconds.
-Completed 13227 evaluations in 7.778375 seconds.
-Completed 11300 evaluations in 6.779669 seconds.
-Completed 15046 evaluations in 8.673626 seconds.
-Completed 11074 evaluations in 6.057937 seconds.
-Completed 7158 evaluations in 4.024152 seconds.
-Completed 15259 evaluations in 7.836753 seconds.
-Completed 570 evaluations in 0.283063 seconds.
-Completed 4092 evaluations in 2.144526 seconds.
-Completed 4188 evaluations in 2.181131 seconds.
-Completed 9039 evaluations in 5.335168 seconds.
-Completed 15814 evaluations in 10.169023 seconds.
-Completed 22092 evaluations in 14.368313 seconds.
-Completed 15081 evaluations in 9.465656 seconds.
-Completed 15602 evaluations in 9.989999 seconds.
-Completed 8534 evaluations in 5.042669 seconds.
-Completed 12214 evaluations in 7.371122 seconds.
-Completed 21134 evaluations in 13.850027 seconds.
-Completed 25117 evaluations in 16.67361 seconds.
-Completed 21923 evaluations in 15.036808 seconds.
-Completed 11000 evaluations in 6.976235 seconds.
-Completed 9993 evaluations in 6.214646 seconds.
-Completed 10807 evaluations in 6.599293 seconds.
-Completed 14923 evaluations in 9.096062 seconds.
-Completed 23858 evaluations in 14.652435 seconds.
-Completed 31232 evaluations in 20.350149 seconds.
-Completed 27623 evaluations in 17.649304 seconds.
-Completed 19372 evaluations in 12.449774 seconds.
-Completed 18854 evaluations in 11.290901 seconds.
-Completed 26175 evaluations in 15.699084 seconds.
-Completed 31653 evaluations in 18.258485 seconds.
-Completed 15929 evaluations in 8.781607 seconds.
-Completed 21798 evaluations in 12.201914 seconds.
-Completed 26077 evaluations in 14.584622 seconds.
-Completed 11000 evaluations in 6.943497 seconds.
-Completed 9993 evaluations in 6.159022 seconds.
-Completed 10807 evaluations in 6.585289 seconds.
-Completed 14923 evaluations in 9.050464 seconds.
-Completed 23210 evaluations in 15.105915 seconds.
-Completed 34183 evaluations in 24.261984 seconds.
-Completed 23223 evaluations in 15.177123 seconds.
-Completed 21785 evaluations in 12.866602 seconds.
-Completed 791 evaluations in 0.465039 seconds.
-Completed 759 evaluations in 0.423518 seconds.
-Completed 1480 evaluations in 0.80652 seconds.
-Completed 10548 evaluations in 6.511498 seconds.
-Completed 12033 evaluations in 7.922311 seconds.
-Completed 11000 evaluations in 7.046836 seconds.
-Completed 9993 evaluations in 6.252556 seconds.
-Completed 12679 evaluations in 8.271171 seconds.
-Completed 17117 evaluations in 11.125293 seconds.
-Completed 12261 evaluations in 7.509235 seconds.
-Completed 12322 evaluations in 7.544673 seconds.
-Completed 27194 evaluations in 17.042803 seconds.
-Completed 11000 evaluations in 7.048373 seconds.
-Completed 18611 evaluations in 12.17338 seconds.
-Completed 23006 evaluations in 15.612784 seconds.
-Completed 28585 evaluations in 19.320733 seconds.
-Completed 11000 evaluations in 7.061607 seconds.
-Completed 18611 evaluations in 12.295063 seconds.
-Completed 23006 evaluations in 15.719643 seconds.
-Completed 11000 evaluations in 7.029129 seconds.
-Completed 17029 evaluations in 11.142864 seconds.
-Completed 10723 evaluations in 6.687891 seconds.
-Completed 17575 evaluations in 10.960103 seconds.
-Completed 11000 evaluations in 7.055086 seconds.
-Completed 18611 evaluations in 12.270493 seconds.
-Completed 23006 evaluations in 15.612732 seconds.
-Completed 28585 evaluations in 19.329347 seconds.
-Completed 26299 evaluations in 16.799137 seconds.
-Completed 31635 evaluations in 22.272156 seconds.
-Completed 19081 evaluations in 11.332868 seconds.
-Completed 11000 evaluations in 6.665985 seconds.
-Completed 17040 evaluations in 10.777747 seconds.
-Completed 15649 evaluations in 9.518534 seconds.
-Completed 13737 evaluations in 8.321676 seconds.
-Completed 9039 evaluations in 5.407278 seconds.
-Completed 13729 evaluations in 8.875721 seconds.
-Completed 24968 evaluations in 16.166318 seconds.
-Completed 24349 evaluations in 15.975614 seconds.
-Completed 22217 evaluations in 13.706292 seconds.
-Completed 50 evaluations in 0.073004 seconds.
-Completed 1536 evaluations in 0.809815 seconds.
-Completed 12794 evaluations in 6.315571 seconds.
-Completed 11000 evaluations in 7.082455 seconds.
-Completed 14745 evaluations in 9.667919 seconds.
-Completed 15419 evaluations in 9.957555 seconds.
-Completed 13949 evaluations in 8.880751 seconds.
-Completed 28929 evaluations in 18.052544 seconds.
+Completed 8921 evaluations in 11.05798 seconds.
+The winning score was 139.
+Completed 14580 evaluations in 16.665362 seconds.
+The winning score was 49.
+Completed 19773 evaluations in 23.4555 seconds.
+The winning score was 47.
+Completed 21106 evaluations in 27.151881 seconds.
+The winning score was 51.
+Completed 11478 evaluations in 16.289485 seconds.
+The winning score was 53.
+Completed 15263 evaluations in 19.825617 seconds.
+The winning score was 55.
+Completed 27503 evaluations in 31.906992 seconds.
+The winning score was 146.
+Completed 23180 evaluations in 28.274179 seconds.
+The winning score was 149.
+Completed 4778 evaluations in 18.059087 seconds.
+The winning score was 154.
+Completed 1272 evaluations in 2.319648 seconds.
+The winning score was 149.
+Completed 12412 evaluations in 14.785198 seconds.
+The winning score was 63.
+Completed 11364 evaluations in 14.679323 seconds.
+The winning score was 63.
+Completed 11170 evaluations in 15.069837 seconds.
+The winning score was 63.
+Completed 11958 evaluations in 14.550116 seconds.
+The winning score was 69.
+Completed 10201 evaluations in 11.728075 seconds.
+The winning score was 72.
+Completed 10271 evaluations in 12.524333 seconds.
+The winning score was 73.
+Completed 4640 evaluations in 6.48975 seconds.
+The winning score was 165.
+Completed 1639 evaluations in 2.599554 seconds.
+The winning score was 165.
+Completed 1548 evaluations in 3.198718 seconds.
+The winning score was 166.
+Completed 549 evaluations in 1.216762 seconds.
+The winning score was 166.
+Completed 2677 evaluations in 7.558537 seconds.
+The winning score was 167.
+Completed 5028 evaluations in 8.738485 seconds.
+The winning score was 168.
+Completed 638 evaluations in 1.249407 seconds.
+The winning score was 167.
+Completed 53 evaluations in 0.200102 seconds.
+The winning score was 168.
+Completed 220 evaluations in 0.488437 seconds.
+The winning score was 168.
+Completed 160 evaluations in 0.521441 seconds.
+The winning score was 77.
+Completed 74 evaluations in 0.255556 seconds.
+The winning score was 176.
+Completed 52 evaluations in 0.244793 seconds.
+The winning score was 77.
+Completed 21 evaluations in 0.131484 seconds.
+The winning score was 77.
