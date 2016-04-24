@@ -1,19 +1,26 @@
 class Display
-  attr_reader :board
+  attr_reader :board, :game
   include Cursorable
 
-  def initialize(board)
+  def initialize(game, board)
+    @game = game
     @board = board
     @cursor_pos = [0,0]
     @selected = false
   end
 
   def render
-    @board.board.each_with_index do |row, idx|
+    board.board.each_with_index do |row, idx|
       puts row_display(row, idx)
     end
-    puts "#{board.game.current_player.to_s.capitalize}'s turn"
-    puts "#{board.game.current_player.to_s.capitalize} is in check" if @board.in_check?(board.game.current_player.color)
+
+    puts "#{game.current_player.to_s.capitalize}'s turn"
+    puts game.player_two.stats
+    puts board.score(game.current_player.color)
+
+    if board.in_check?(game.current_player.color)
+      puts "#{game.current_player.to_s.capitalize} is in check"
+    end
   end
 
   private
@@ -32,7 +39,8 @@ class Display
   def pick_up(pos)
     if @selected
       begin
-        @board.move(@selected, pos)
+        board.move(@selected, pos)
+        game.switch_players!
       rescue BoardError => e
         puts e.message
         sleep(1)
@@ -40,7 +48,13 @@ class Display
         @selected = false
       end
     else
-      @selected = pos
+      if board[pos].nil?
+        puts "There is no piece there."
+      elsif board[pos].color == game.current_player.color
+        @selected = pos
+      else
+        puts "That is not your piece."
+      end
     end
   end
 

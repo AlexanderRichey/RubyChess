@@ -1,16 +1,14 @@
-class BoardError < StandardError
-
-end
+require 'byebug'
+require_relative 'evaluator'
 
 class Board
-  attr_reader :board, :game
-  attr_accessor :game
+  attr_reader :board
 
-  def initialize(game, board = (Array.new(8) { Array.new(8) }))
-    @game = game
+  def initialize(game, board = (Array.new(8) { Array.new(8) }), new_game = true)
+    @new_game = new_game
     @board = board
 
-    populate_board
+    populate_board if @new_game
   end
 
   def [](pos)
@@ -24,19 +22,16 @@ class Board
   end
 
   def move(start, end_pos)
-    # Check to see if there as a piece to be selected
-    raise BoardError.new("No chess-piece there.") if self[start].nil?
+    if self[start].nil?
+      raise BoardError.new("No chess-piece there.")
+    end
 
-    # Grab piece
-    piece = self[start]
+    unless self[start].valid_moves.include?(end_pos)
+      raise BoardError.new("Invalid move.")
+    end
 
-    # Check whether piece moves that way
-    raise BoardError.new("Invalid move.") unless piece.valid_moves.include?(end_pos)
-
-    check_check(start, end_pos)
-    make_move(start, end_pos, piece)
-
-    game.switch_players!
+    check_check(start, end_pos, true)
+    make_move(start, end_pos, self[start])
   end
 
   def checkmate?
@@ -71,7 +66,7 @@ class Board
       row.each do |piece|
         next if piece.nil?
 
-        moves = piece.valid_moves(true)
+        moves = piece.valid_moves
         moves.each do |coord|
           return true if self[coord].is_a?(King) && self[coord].color == color
         end
@@ -84,27 +79,74 @@ class Board
   def check_check(start, end_pos, just_checking = false)
     start_piece = self[start]
     end_piece = self[end_pos]
-
-    previous_check = in_check?(game.current_player.color)
+    color = start_piece.color
+    currently_in_check = in_check?(color)
 
     make_move(start, end_pos, start_piece)
 
-    if in_check?(game.current_player.color)
+    if in_check?(color)
       undo_move(start, end_pos, start_piece, end_piece)
 
-      if previous_check
+      if currently_in_check
         raise BoardError.new("Must move out of check.")
       else
         raise BoardError.new("Can't move into check.")
       end
     end
 
-    undo_move(start, end_pos, start_piece, end_piece) if just_checking
+    if just_checking
+      undo_move(start, end_pos, start_piece, end_piece)
+    end
 
     false
   end
 
-  private
+  def valid_moves(color)
+    moves = Hash.new { Array.new }
+
+    board.each do |row|
+      row.each do |piece|
+        next if piece.nil? || piece.color != color
+
+        valid_moves = piece.valid_moves
+        next if valid_moves.empty?
+
+        moves[piece] =
+          valid_moves.select { |move| ok_move?(piece.pos, move) }
+      end
+    end
+
+    moves
+  end
+
+  def ok_move?(start_pos, end_pos)
+    begin
+      check_check(start_pos, end_pos, true)
+    rescue BoardError
+      return false
+    end
+    true
+  end
+
+  def pieces(color)
+    pieces = []
+
+    board.each do |row|
+      row.each do |piece|
+        if piece.nil? || piece.color != color
+          next
+        else
+          pieces << piece
+        end
+      end
+    end
+
+    pieces
+  end
+
+  def score(color)
+    Evaluator.new(self, color).evaluate
+  end
 
   def make_move(start_pos, end_pos, piece)
     self[start_pos] = nil
@@ -112,7 +154,22 @@ class Board
     piece.pos = end_pos
   end
 
-  def populate_board #place pieces
+  def opponent_color(color)
+    color == :white ? :black : :white
+  end
+
+  def undo_move(start_pos, end_pos, start_piece, end_piece)
+    self[start_pos] = start_piece
+    self[end_pos] = end_piece
+    start_piece.pos = start_pos
+  end
+
+  def deep_dup
+    Board.new(nil, self.board.deep_dup, false)
+  end
+
+  private
+  def populate_board
     populate_back_row(0, :black)
     populate_pawns(1, :black)
 
@@ -138,10 +195,15 @@ class Board
       self[[row, col]] = Pawn.new(self, [row, col], direction, color)
     end
   end
+end
 
-  def undo_move(start_pos, end_pos, start_piece, end_piece)
-    self[start_pos] = start_piece
-    self[end_pos] = end_piece
-    start_piece.pos = start_pos
+class Array
+  def deep_dup
+    self.inject([]) do |dup, el|
+      dup << (el.is_a?(Array) ? el.deep_dup : (el.nil? ? nil : el.dup) )
+    end
   end
+end
+
+class BoardError < StandardError
 end

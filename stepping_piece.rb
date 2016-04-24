@@ -4,14 +4,14 @@ class SteppingPiece < Piece
     raise
   end
 
-  def valid_moves(all_moves = false)
+  def valid_moves
     output = []
 
     move_dirs.each do |(d_row, d_col)|
       current_row, current_col = pos
       possible_pos = [(current_row += d_row), (current_col += d_col)]
 
-      if @board.in_bounds?(possible_pos) && valid?(pos, possible_pos, all_moves)
+      if @board.in_bounds?(possible_pos) && valid?(pos, possible_pos)
         output << possible_pos
       end
     end

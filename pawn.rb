@@ -5,20 +5,21 @@ class Pawn < Piece
     super(board, pos, color)
     @original_position = pos.dup
     @direction = direction
+    @value = 1
   end
 
   def symbol
     " ♟ "
   end
 
-  def valid_moves(all_moves = false)
+  def valid_moves
     output = []
 
     move_dirs.each do |(d_row, d_col)|
       current_row, current_col = pos
       possible_pos = [(current_row += d_row), (current_col += d_col)]
 
-      if @board.in_bounds?(possible_pos) && valid_pawn_move?(pos, possible_pos, all_moves)
+      if @board.in_bounds?(possible_pos) && valid_pawn_move?(pos, possible_pos)
         output << possible_pos
       end
     end
@@ -26,10 +27,8 @@ class Pawn < Piece
     output
   end
 
-  def valid_pawn_move?(pos, possible_pos, all_moves)
-    unless all_moves
-      return false if @board[pos].color != @board.game.current_player.color
-    end
+  def valid_pawn_move?(pos, possible_pos)
+    return true if @board[pos].nil?
 
     if @board[possible_pos].nil?
       return !diagonal_move?(pos, possible_pos)

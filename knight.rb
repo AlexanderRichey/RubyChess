@@ -1,4 +1,9 @@
 class Knight < SteppingPiece
+  def initialize(board, pos, color)
+    super(board, pos, color)
+    @value = 3
+  end
+
   def symbol
     " ♞ "
   end

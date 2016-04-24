@@ -1,4 +1,9 @@
 class King < SteppingPiece
+  def initialize(board, pos, color)
+    super(board, pos, color)
+    @value = 100
+  end
+
   def symbol
     " ♚ "
   end

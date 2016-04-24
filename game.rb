@@ -7,12 +7,11 @@ class Game
     board ||= Board.new(self)
 
     @board = board
-    @board.game = self # board.game is not the same when loading from a YAML.
 
-    @display = Display.new(@board)
+    @display = Display.new(self, @board)
 
     @player_one = HumanPlayer.new(@display, :white)
-    @player_two = HumanPlayer.new(@display, :black)
+    @player_two = ComputerPlayer.new(@display, :black)
 
     @current_player = player_one
   end
@@ -36,8 +35,9 @@ class Game
     until @board.checkmate?
       system("clear")
       @display.render
-      current_player.make_a_move
+      current_player.make_a_move { self.switch_players! }
     end
+
     switch_players!
     puts "Checkmate! #{current_player.to_s.capitalize} wins!"
   end

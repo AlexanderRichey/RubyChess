@@ -6,7 +6,7 @@ class HumanPlayer
     @color = color
   end
 
-  def make_a_move
+  def make_a_move(&prc)
     @display.get_input
   end
 
