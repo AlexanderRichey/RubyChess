@@ -28,13 +28,6 @@ class ComputerPlayer
     "Evaluated #{STATS[:counter]} tree nodes in #{STATS[:diff]} seconds."
   end
 
-  def log_stats!(score)
-    File.open('log.txt', 'a') do |log|
-      log.puts stats
-      log.puts "The winning score was #{score}."
-    end
-  end
-
   def make_a_move(&prc)
     STATS[:counter] = 0
     STATS[:start_time] = Time.now
@@ -51,7 +44,6 @@ class ComputerPlayer
     STATS[:diff] = STATS[:end_time] - STATS[:start_time]
 
     board.move(best_move[:start_pos], best_move[:end_pos])
-    log_stats!(best_move[:score])
 
     prc.call
   end
@@ -69,6 +61,13 @@ class ComputerPlayer
     end
 
     score
+  end
+
+  def log_stats!(score) #for debugging
+    File.open('log.txt', 'a') do |log|
+      log.puts stats
+      log.puts "The winning score was #{score}."
+    end
   end
 
   def sign_to_sym(sign)

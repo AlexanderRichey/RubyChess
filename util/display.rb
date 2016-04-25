@@ -14,7 +14,7 @@ class Display
       puts row_display(row, idx)
     end
 
-    puts "#{game.current_player.to_s.capitalize}'s turn"
+    puts current_player
     puts computer_status
 
     if board.in_check?(game.current_player.color)
@@ -23,6 +23,14 @@ class Display
   end
 
   private
+  def current_player
+    if game.current_player.is_a?(ComputerPlayer)
+      return "ComputerPlayer's turn..."
+    else
+      return "HumanPlayer's turn..."
+    end
+  end
+
   def computer_status
     if game.current_player.is_a?(ComputerPlayer)
       return "Analyzing move tree..."
