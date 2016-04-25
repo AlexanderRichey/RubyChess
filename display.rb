@@ -15,8 +15,7 @@ class Display
     end
 
     puts "#{game.current_player.to_s.capitalize}'s turn"
-    puts game.player_two.stats
-    puts board.score(game.current_player.color)
+    puts computer_status
 
     if board.in_check?(game.current_player.color)
       puts "#{game.current_player.to_s.capitalize} is in check"
@@ -24,6 +23,13 @@ class Display
   end
 
   private
+  def computer_status
+    if game.current_player.is_a?(ComputerPlayer)
+      return "Analyzing move tree..."
+    else
+      return game.player_two.stats
+    end
+  end
 
   def colors_for(i, j, color)
     if [i, j] == @cursor_pos

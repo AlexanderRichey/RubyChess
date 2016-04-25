@@ -1,58 +1,38 @@
-Completed 8921 evaluations in 11.05798 seconds.
-The winning score was 139.
-Completed 14580 evaluations in 16.665362 seconds.
-The winning score was 49.
-Completed 19773 evaluations in 23.4555 seconds.
-The winning score was 47.
-Completed 21106 evaluations in 27.151881 seconds.
-The winning score was 51.
-Completed 11478 evaluations in 16.289485 seconds.
-The winning score was 53.
-Completed 15263 evaluations in 19.825617 seconds.
-The winning score was 55.
-Completed 27503 evaluations in 31.906992 seconds.
-The winning score was 146.
-Completed 23180 evaluations in 28.274179 seconds.
-The winning score was 149.
-Completed 4778 evaluations in 18.059087 seconds.
-The winning score was 154.
-Completed 1272 evaluations in 2.319648 seconds.
-The winning score was 149.
-Completed 12412 evaluations in 14.785198 seconds.
-The winning score was 63.
-Completed 11364 evaluations in 14.679323 seconds.
-The winning score was 63.
-Completed 11170 evaluations in 15.069837 seconds.
-The winning score was 63.
-Completed 11958 evaluations in 14.550116 seconds.
-The winning score was 69.
-Completed 10201 evaluations in 11.728075 seconds.
-The winning score was 72.
-Completed 10271 evaluations in 12.524333 seconds.
-The winning score was 73.
-Completed 4640 evaluations in 6.48975 seconds.
-The winning score was 165.
-Completed 1639 evaluations in 2.599554 seconds.
-The winning score was 165.
-Completed 1548 evaluations in 3.198718 seconds.
-The winning score was 166.
-Completed 549 evaluations in 1.216762 seconds.
-The winning score was 166.
-Completed 2677 evaluations in 7.558537 seconds.
-The winning score was 167.
-Completed 5028 evaluations in 8.738485 seconds.
-The winning score was 168.
-Completed 638 evaluations in 1.249407 seconds.
-The winning score was 167.
-Completed 53 evaluations in 0.200102 seconds.
-The winning score was 168.
-Completed 220 evaluations in 0.488437 seconds.
-The winning score was 168.
-Completed 160 evaluations in 0.521441 seconds.
-The winning score was 77.
-Completed 74 evaluations in 0.255556 seconds.
-The winning score was 176.
-Completed 52 evaluations in 0.244793 seconds.
-The winning score was 77.
-Completed 21 evaluations in 0.131484 seconds.
-The winning score was 77.
+Evaluated 63 tree nodes in 0.464135 seconds.
+The winning score was 39.
+Evaluated 110 tree nodes in 0.710332 seconds.
+The winning score was 39.
+Evaluated 77 tree nodes in 0.679379 seconds.
+The winning score was 39.
+Evaluated 136 tree nodes in 0.811074 seconds.
+The winning score was 39.
+Evaluated 134 tree nodes in 0.735195 seconds.
+The winning score was 36.
+Evaluated 103 tree nodes in 0.534635 seconds.
+The winning score was 37.
+Evaluated 80 tree nodes in 0.422308 seconds.
+The winning score was 37.
+Evaluated 94 tree nodes in 0.407017 seconds.
+The winning score was 38.
+Evaluated 137 tree nodes in 0.548028 seconds.
+The winning score was 40.
+Evaluated 275 tree nodes in 0.666698 seconds.
+The winning score was 40.
+Evaluated 301 tree nodes in 0.91671 seconds.
+The winning score was Infinity.
+Evaluated 310 tree nodes in 1.003125 seconds.
+The winning score was Infinity.
+Evaluated 227 tree nodes in 0.806835 seconds.
+The winning score was Infinity.
+Evaluated 206 tree nodes in 0.991506 seconds.
+The winning score was Infinity.
+Evaluated 172 tree nodes in 0.45337 seconds.
+The winning score was 32.
+Evaluated 78 tree nodes in 0.387644 seconds.
+The winning score was 34.
+Evaluated 243 tree nodes in 0.900847 seconds.
+The winning score was 33.
+Evaluated 175 tree nodes in 0.859019 seconds.
+The winning score was 30.
+Evaluated 28 tree nodes in 0.135226 seconds.
+The winning score was 37.

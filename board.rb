@@ -119,6 +119,25 @@ class Board
     moves
   end
 
+  def capture_moves(color)
+    moves = Hash.new { Array.new }
+
+    board.each do |row|
+      row.each do |piece|
+        next if piece.nil? || piece.color != color
+
+        valid_moves = piece.valid_moves
+        next if valid_moves.empty?
+
+        moves[piece] =
+          valid_moves.select { |move| ok_move?(piece.pos, move) &&
+            capture?(piece.pos, move) }
+      end
+    end
+
+    moves
+  end
+
   def ok_move?(start_pos, end_pos)
     begin
       check_check(start_pos, end_pos, true)
@@ -126,6 +145,16 @@ class Board
       return false
     end
     true
+  end
+
+  def capture?(start_pos, end_pos)
+    return false unless self[end_pos].is_a?(Piece)
+
+    if self[end_pos].color != self[start_pos].color
+      return true
+    else
+      return false
+    end
   end
 
   def pieces(color)
@@ -144,8 +173,8 @@ class Board
     pieces
   end
 
-  def score(color)
-    Evaluator.new(self, color).evaluate
+  def score(color, alpha, beta)
+    Evaluator.new(self, color).quiesce(alpha, beta)
   end
 
   def make_move(start_pos, end_pos, piece)

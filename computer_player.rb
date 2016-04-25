@@ -13,7 +13,7 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 4
+  MAX_DEPTH = 1
 
   def initialize(display, color)
     @board = display.board
@@ -25,7 +25,7 @@ class ComputerPlayer
   end
 
   def stats
-    "Completed #{STATS[:counter]} evaluations in #{STATS[:diff]} seconds."
+    "Evaluated #{STATS[:counter]} tree nodes in #{STATS[:diff]} seconds."
   end
 
   def log_stats!(score)
@@ -57,13 +57,13 @@ class ComputerPlayer
   end
 
   private
-  def log_score!(score)
+  def log_score!(score) #for debugging
     File.open('log.txt', 'a') do |log|
       log.puts "Eval ##{STATS[:counter]} => #{score}"
     end
   end
 
-  def log_board_score!(score)
+  def log_board_score!(score) #for debugging
     File.open('log.txt', 'a') do |log|
       log.puts "Board Score => #{score}"
     end
@@ -82,7 +82,7 @@ class ComputerPlayer
 
   def negamax(board_node, depth, sign, alpha, beta)
     if depth > MAX_DEPTH
-      return sign * board_node.score(sign_to_sym(sign))
+      return sign * board_node.score(sign_to_sym(sign), alpha, beta)
     end
 
     node = nil
@@ -99,8 +99,8 @@ class ComputerPlayer
           duped_board,
           depth + 1,
           sign * -1,
-          alpha * -1,
-          beta * -1
+          beta * -1,
+          alpha * -1
         )
 
         STATS[:counter] += 1
@@ -113,7 +113,7 @@ class ComputerPlayer
 
         if score >= beta
           return {
-              score: score,
+              score: beta,
               start_pos: start_pos,
               end_pos: end_pos
             }
