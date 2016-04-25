@@ -1,6 +1,6 @@
-# Ruby Chess
+# Chess AI
 
-Two player chess, coded in Ruby, playable in terminal.
+Chess, coded in Ruby, playable in terminal. The AI is powered by a negaMax algorithm with alphaBeta pruning and a quiescent evaluation function.
 
 ## How To Play
 
@@ -18,11 +18,13 @@ Two player chess, coded in Ruby, playable in terminal.
 ### Saving and Loading Games
 
 - Type `s` to save your game. You will be prompted to enter a filename and your file will be saved in the same directory in which your game is running.
-- Load a game by typing `ruby game.rb #{your_game}` in your command line.
+- Load a game by typing `ruby game.rb your_game` in your command line.
 
 ## To Do
 
-- [ ] Add AI...
+- [ ] Implement castling
+- [ ] Implement pawn promotion
+- [ ] Add technical details to readme
 
 ## Screenshot
 

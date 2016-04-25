@@ -1,38 +1,16 @@
-Evaluated 63 tree nodes in 0.464135 seconds.
+Evaluated 66 tree nodes in 0.510018 seconds.
 The winning score was 39.
-Evaluated 110 tree nodes in 0.710332 seconds.
+Evaluated 69 tree nodes in 0.557717 seconds.
 The winning score was 39.
-Evaluated 77 tree nodes in 0.679379 seconds.
+Evaluated 70 tree nodes in 0.571346 seconds.
 The winning score was 39.
-Evaluated 136 tree nodes in 0.811074 seconds.
-The winning score was 39.
-Evaluated 134 tree nodes in 0.735195 seconds.
-The winning score was 36.
-Evaluated 103 tree nodes in 0.534635 seconds.
-The winning score was 37.
-Evaluated 80 tree nodes in 0.422308 seconds.
-The winning score was 37.
-Evaluated 94 tree nodes in 0.407017 seconds.
+Evaluated 149 tree nodes in 0.718778 seconds.
 The winning score was 38.
-Evaluated 137 tree nodes in 0.548028 seconds.
-The winning score was 40.
-Evaluated 275 tree nodes in 0.666698 seconds.
-The winning score was 40.
-Evaluated 301 tree nodes in 0.91671 seconds.
+Evaluated 24 tree nodes in 0.041471 seconds.
+The winning score was 41.
+Evaluated 102 tree nodes in 0.828258 seconds.
+The winning score was 42.
+Evaluated 639 tree nodes in 1.301526 seconds.
 The winning score was Infinity.
-Evaluated 310 tree nodes in 1.003125 seconds.
-The winning score was Infinity.
-Evaluated 227 tree nodes in 0.806835 seconds.
-The winning score was Infinity.
-Evaluated 206 tree nodes in 0.991506 seconds.
-The winning score was Infinity.
-Evaluated 172 tree nodes in 0.45337 seconds.
-The winning score was 32.
-Evaluated 78 tree nodes in 0.387644 seconds.
-The winning score was 34.
-Evaluated 243 tree nodes in 0.900847 seconds.
-The winning score was 33.
-Evaluated 175 tree nodes in 0.859019 seconds.
-The winning score was 30.
-Evaluated 28 tree nodes in 0.135226 seconds.
-The winning score was 37.
+Evaluated 321 tree nodes in 1.424943 seconds.
+The winning score was 47.
