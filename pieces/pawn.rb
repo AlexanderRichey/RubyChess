@@ -31,9 +31,13 @@ class Pawn < Piece
     return true if @board[pos].nil?
 
     if @board[possible_pos].nil?
-      return !diagonal_move?(pos, possible_pos)
-    elsif @board[possible_pos].color == @board[pos].opponent_color && diagonal_move?(pos, possible_pos)
-      return true
+      return (
+        !diagonal_move?(pos, possible_pos) &&
+        !en_passant?(pos, possible_pos)
+      )
+    elsif @board[possible_pos].color == @board[pos].opponent_color &&
+      diagonal_move?(pos, possible_pos)
+        return true
     else
       return false
     end
@@ -49,6 +53,18 @@ class Pawn < Piece
     col -= d_col
 
     return row.abs == 1 && col.abs == 1
+  end
+
+  def en_passant?(org_pos, des_pos)
+    if (org_pos[0] - des_pos[0]).abs == 2
+      if @board[[(org_pos[0] + direction), org_pos[1]]].nil?
+        return false
+      else
+        return true
+      end
+    else
+      return false
+    end
   end
 
   def move_dirs
