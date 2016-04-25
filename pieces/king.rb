@@ -1,7 +1,7 @@
 class King < SteppingPiece
   def initialize(board, pos, color)
     super(board, pos, color)
-    @value = 10
+    @value = 20
   end
 
   def symbol

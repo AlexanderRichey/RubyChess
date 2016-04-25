@@ -44,7 +44,11 @@ class Evaluator
   end
 
   def evaluate
-    pawn_advancement_value + material_value
+    material_value +
+    pawn_advancement_value +
+    minor_piece_advancement_value +
+    major_piece_advancement_value +
+    rook_correction
   end
 
   def material_value
@@ -88,7 +92,83 @@ class Evaluator
       end
     end
 
-    (score / 10).ceil
+    (score / 20).ceil
+  end
+
+  def major_piece_advancement_value
+    score = 0
+
+    if color === :white
+      board.pieces(:white).each do |piece|
+        if piece.is_a?(Rook) || piece.is_a?(Queen)
+          score += (7 - piece.pos[0]) ** 2
+
+          if (3..6).include?(piece.pos[1]) #center bonus
+            score *= 2
+          end
+        end
+      end
+    else
+      board.pieces(:black).each do |piece|
+        if piece.is_a?(Rook) || piece.is_a?(Queen)
+          score += (piece.pos[0] - 0) ** 2
+
+          if (3..6).include?(piece.pos[1]) #center bonus
+            score *= 2
+          end
+        end
+      end
+    end
+
+    (score / 40).ceil
+  end
+
+  def minor_piece_advancement_value
+    score = 0
+
+    if color === :white
+      board.pieces(:white).each do |piece|
+        if piece.is_a?(Knight) || piece.is_a?(Bishop)
+          score += (7 - piece.pos[0]) ** 2
+
+          if (3..6).include?(piece.pos[1]) #center bonus
+            score *= 2
+          end
+        end
+      end
+    else
+      board.pieces(:black).each do |piece|
+        if piece.is_a?(Knight) || piece.is_a?(Bishop)
+          score += (piece.pos[0] - 0) ** 2
+
+          if (3..6).include?(piece.pos[1]) #center bonus
+            score *= 2
+          end
+        end
+      end
+    end
+
+    (score / 30).ceil
+  end
+
+  def rook_correction
+    score = 0
+
+    if color === :white
+      board.pieces(:white).each do |piece|
+        if piece.is_a?(Rook)
+          score -= 10 if piece.pos == [6, 6]
+        end
+      end
+    else
+      board.pieces(:black).each do |piece|
+        if piece.is_a?(Rook)
+          score -= 10 if piece.pos == [0, 1]
+        end
+      end
+    end
+
+    (score).ceil
   end
 
   def opponent_color(color)

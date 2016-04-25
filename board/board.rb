@@ -225,13 +225,5 @@ class Board
   end
 end
 
-class Array
-  def deep_dup
-    self.inject([]) do |dup, el|
-      dup << (el.is_a?(Array) ? el.deep_dup : (el.nil? ? nil : el.dup) )
-    end
-  end
-end
-
 class BoardError < StandardError
 end
