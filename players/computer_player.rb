@@ -14,7 +14,7 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 3
+  MAX_DEPTH = 1
 
   def initialize(display, color)
     @board = display.board

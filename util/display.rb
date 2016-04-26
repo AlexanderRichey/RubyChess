@@ -19,7 +19,7 @@ class Display
     puts @cursor_pos.to_s
 
     if board.in_check?(game.current_player.color)
-      puts "#{game.current_player.to_s.capitalize} is in check"
+      puts "#{game.current_player.to_s.capitalize} is in check."
     end
   end
 

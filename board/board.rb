@@ -180,6 +180,8 @@ class Board
     self[start_pos] = nil
     self[end_pos] = piece
     piece.pos = end_pos
+
+    promote!(end_pos, piece.color) if promotion?(piece, end_pos)
   end
 
   def opponent_color(color)
@@ -190,6 +192,8 @@ class Board
     self[start_pos] = start_piece
     self[end_pos] = end_piece
     start_piece.pos = start_pos
+
+    demote!(start_pos, start_piece.color) if promotion?(start_piece, end_pos)
   end
 
   def deep_dup
@@ -197,6 +201,19 @@ class Board
   end
 
   private
+  def promote!(pos, color)
+    self[pos] = Queen.new(self, pos, color)
+  end
+
+  def demote!(pos, color)
+    direction = (color == :white ? -1 : 1)
+    self[pos] = Pawn.new(self, pos, direction, color)
+  end
+
+  def promotion?(piece, pos)
+    piece.is_a?(Pawn) && pos[0] == (piece.color == :black ? 7 : 0)
+  end
+
   def populate_board
     populate_back_row(0, :black)
     populate_pawns(1, :black)
