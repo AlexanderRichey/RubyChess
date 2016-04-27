@@ -1,13 +1,14 @@
 require_relative '../relatives'
 
 class Board
-  attr_reader :board, :turn_count, :game
+  attr_reader :board, :turn_count, :game, :castled
 
   def initialize(game, board = (Array.new(8) { Array.new(8) }))
     @game = game
     @board = board
     @turn_count = 0
     @game_over = false
+    @castled = false
   end
 
   def [](pos)
@@ -36,15 +37,54 @@ class Board
     @turn_count += 1
   end
 
-  def castle(color)
-    raise BoardError.new("Cannot castle.") unless can_castle?(color)
+  def castle_left(color)
+    if castled || !can_castle_left?(color)
+      raise BoardError.new("Cannot castle.")
+    end
 
-    can_castle_left?(color) ? castle_left!(color) : castle_right!(color)
+    castle_left!(color)
+    @castled = true
     @turn_count += 1
   end
 
-  def can_castle?(color)
-    can_castle_left?(color) || can_castle_right?(color)
+  def castle_right(color)
+    if castled || !can_castle_right?(color)
+      raise BoardError.new("Cannot castle.")
+    end
+
+    castle_right!(color)
+    @castled = true
+    @turn_count += 1
+  end
+
+  def can_castle_right?(color)
+    if color == :black
+      return self[[0, 4]].is_a?(King) &&
+      self[[0, 3]].nil? &&
+      self[[0, 2]].nil? &&
+      self[[0, 1]].nil? &&
+      self[[0, 0]].is_a?(Rook)
+    else
+      return self[[7, 4]].is_a?(King) &&
+      self[[7, 5]].nil? &&
+      self[[7, 6]].nil? &&
+      self[[7, 7]].is_a?(Rook)
+    end
+  end
+
+  def can_castle_left?(color)
+    if color == :black
+      return self[[0, 4]].is_a?(King) &&
+      self[[0, 5]].nil? &&
+      self[[0, 6]].nil? &&
+      self[[0, 7]].is_a?(Rook)
+    else
+      return self[[7, 4]].is_a?(King) &&
+      self[[7, 3]].nil? &&
+      self[[7, 2]].nil? &&
+      self[[7, 1]].nil? &&
+      self[[7, 0]].is_a?(Rook)
+    end
   end
 
   def all_pieces
@@ -214,36 +254,6 @@ class Board
 
   def promotion?(piece, pos)
     piece.is_a?(Pawn) && pos[0] == (piece.color == :black ? 7 : 0)
-  end
-
-  def can_castle_right?(color)
-    if color == :black
-      return self[[0, 4]].is_a?(King) &&
-      self[[0, 3]].nil? &&
-      self[[0, 2]].nil? &&
-      self[[0, 1]].nil? &&
-      self[[0, 0]].is_a?(Rook)
-    else
-      return self[[7, 4]].is_a?(King) &&
-      self[[7, 5]].nil? &&
-      self[[7, 6]].nil? &&
-      self[[7, 7]].is_a?(Rook)
-    end
-  end
-
-  def can_castle_left?(color)
-    if color == :black
-      return self[[0, 4]].is_a?(King) &&
-      self[[0, 5]].nil? &&
-      self[[0, 6]].nil? &&
-      self[[0, 7]].is_a?(Rook)
-    else
-      return self[[7, 4]].is_a?(King) &&
-      self[[7, 3]].nil? &&
-      self[[7, 2]].nil? &&
-      self[[7, 1]].nil? &&
-      self[[7, 0]].is_a?(Rook)
-    end
   end
 
   def castle_right!(color)

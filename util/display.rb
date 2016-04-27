@@ -17,8 +17,12 @@ class Display
     puts current_player
     puts computer_status
 
-    if board.can_castle?(game.current_player.color)
-      puts "Type 'c' to castle."
+    if board.can_castle_left?(game.current_player.color)
+      puts "Type 'l' to castle-left."
+    end
+
+    if board.can_castle_right?(game.current_player.color)
+      puts "Type 'r' to castle-right."
     end
 
     if board.in_check?(game.current_player.color) && !board.checkmate?
@@ -76,9 +80,19 @@ class Display
     end
   end
 
-  def castle
+  def castle_right
     begin
-      board.castle(game.current_player.color)
+      board.castle_right(game.current_player.color)
+      game.switch_players!
+    rescue BoardError => e
+      puts e.message
+      sleep(1)
+    end
+  end
+
+  def castle_left
+    begin
+      board.castle_left(game.current_player.color)
       game.switch_players!
     rescue BoardError => e
       puts e.message
