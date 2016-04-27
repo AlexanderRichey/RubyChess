@@ -1,5 +1,5 @@
 class ComputerPlayer
-  attr_reader :color, :board
+  attr_reader :color, :board, :max_depth
 
   STATS = {
     start_time: nil,
@@ -14,11 +14,19 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 1 # Can only be odd numbers!
-
-  def initialize(display, color)
+  def initialize(display, color, mode)
     @board = display.board
     @color = color
+    @max_depth = mode_parse(mode) # Can only be odd numbers
+  end
+
+  def mode_parse(mode)
+    case mode
+    when 'h'
+      return 3
+    when 'e'
+      return 1
+    end
   end
 
   def to_s
@@ -95,7 +103,7 @@ class ComputerPlayer
   end
 
   def negamax(board_node, depth, sign, alpha, beta, capture)
-    if depth > MAX_DEPTH && !capture
+    if depth > max_depth && !capture
       return sign * board_node.score(sign_to_sym(sign), alpha, beta)
     end
 
