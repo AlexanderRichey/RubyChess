@@ -109,6 +109,7 @@ class ComputerPlayer
 
         board_node.make_move!(start_pos, end_pos, start_piece)
 
+        # Search one layer deeper if capture
         # if end_piece.is_a?(Piece) && capture == false
         #   capture = true
         # else

@@ -17,6 +17,10 @@ class Display
     puts current_player
     puts computer_status
 
+    if board.can_castle?(game.current_player.color)
+      puts "Type 'c' to castle."
+    end
+
     if board.in_check?(game.current_player.color) && !board.checkmate?
       puts "#{game.current_player.to_s.capitalize} is in check."
     end
@@ -69,6 +73,16 @@ class Display
       else
         puts "That is not your piece."
       end
+    end
+  end
+
+  def castle
+    begin
+      board.castle(game.current_player.color)
+      game.switch_players!
+    rescue BoardError => e
+      puts e.message
+      sleep(1)
     end
   end
 

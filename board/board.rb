@@ -36,6 +36,17 @@ class Board
     @turn_count += 1
   end
 
+  def castle(color)
+    raise BoardError.new("Cannot castle.") unless can_castle?(color)
+
+    can_castle_left?(color) ? castle_left!(color) : castle_right!(color)
+    @turn_count += 1
+  end
+
+  def can_castle?(color)
+    can_castle_left?(color) || can_castle_right?(color)
+  end
+
   def all_pieces
     all_pieces = []
 
@@ -203,6 +214,68 @@ class Board
 
   def promotion?(piece, pos)
     piece.is_a?(Pawn) && pos[0] == (piece.color == :black ? 7 : 0)
+  end
+
+  def can_castle_right?(color)
+    if color == :black
+      return self[[0, 4]].is_a?(King) &&
+      self[[0, 3]].nil? &&
+      self[[0, 2]].nil? &&
+      self[[0, 1]].nil? &&
+      self[[0, 0]].is_a?(Rook)
+    else
+      return self[[7, 4]].is_a?(King) &&
+      self[[7, 5]].nil? &&
+      self[[7, 6]].nil? &&
+      self[[7, 7]].is_a?(Rook)
+    end
+  end
+
+  def can_castle_left?(color)
+    if color == :black
+      return self[[0, 4]].is_a?(King) &&
+      self[[0, 5]].nil? &&
+      self[[0, 6]].nil? &&
+      self[[0, 7]].is_a?(Rook)
+    else
+      return self[[7, 4]].is_a?(King) &&
+      self[[7, 3]].nil? &&
+      self[[7, 2]].nil? &&
+      self[[7, 1]].nil? &&
+      self[[7, 0]].is_a?(Rook)
+    end
+  end
+
+  def castle_right!(color)
+    if color == :black
+      king = self[[0, 4]]
+      make_move!([0, 4], [0, 2], king)
+
+      rook = self[[0, 0]]
+      make_move!([0, 0], [0, 3], rook)
+    else
+      king = self[[7, 4]]
+      make_move!([7, 4], [7, 6], king)
+
+      rook = self[[7, 7]]
+      make_move!([7, 7], [7, 5], rook)
+    end
+  end
+
+  def castle_left!(color)
+    if color == :black
+      king = self[[0, 4]]
+      make_move!([0, 4], [0, 6], king)
+
+      rook = self[[0, 7]]
+      make_move!([0, 7], [0, 5], rook)
+    else
+      king = self[[7, 4]]
+      make_move!([7, 4], [7, 2], king)
+
+      rook = self[[7, 0]]
+      make_move!([7, 0], [7, 3], rook)
+    end
   end
 
   def populate_back_row!(row, color)

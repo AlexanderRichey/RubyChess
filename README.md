@@ -22,8 +22,8 @@ Chess, coded in Ruby, playable in terminal. The AI is powered by a negaMax algor
 
 ## To Do
 
-- [ ] Implement castling
-- [ ] Implement pawn promotion
+- [X] Implement castling
+- [X] Implement pawn promotion
 - [ ] Add technical details to readme
 
 ## Screenshot
