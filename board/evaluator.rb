@@ -23,11 +23,11 @@ class Evaluator
         start_pos = piece.pos
         start_piece = piece
         end_piece = board[end_pos]
-        board.make_move(start_pos, end_pos, start_piece)
+        board.make_move!(start_pos, end_pos, start_piece)
 
         score = -quiesce(-beta, -alpha)
 
-        board.undo_move(start_pos, end_pos, start_piece, end_piece)
+        board.undo_move!(start_pos, end_pos, start_piece, end_piece)
 
         if score >= beta
           return beta
@@ -48,17 +48,18 @@ class Evaluator
     pawn_advancement_value +
     minor_piece_advancement_value +
     major_piece_advancement_value +
-    rook_correction
+    rook_correction +
+    checkmate_value
   end
 
   def material_value
     score = 0
-    board.pieces(color).each do |piece|
+    board.pieces_for(color).each do |piece|
       score += piece.value
     end
 
     opp_score = 0
-    board.pieces(opponent_color(color)).each do |piece|
+    board.pieces_for(opponent_color(color)).each do |piece|
       opp_score += piece.value
     end
 
@@ -71,7 +72,7 @@ class Evaluator
     score = 0
 
     if color === :white
-      board.pieces(:white).each do |piece|
+      board.pieces_for(:white).each do |piece|
         if piece.is_a?(Pawn)
           score += (6 - piece.pos[0]) ** 2
 
@@ -81,7 +82,7 @@ class Evaluator
         end
       end
     else
-      board.pieces(:black).each do |piece|
+      board.pieces_for(:black).each do |piece|
         if piece.is_a?(Pawn)
           score += (piece.pos[0] - 1) ** 2
 
@@ -99,7 +100,7 @@ class Evaluator
     score = 0
 
     if color === :white
-      board.pieces(:white).each do |piece|
+      board.pieces_for(:white).each do |piece|
         if piece.is_a?(Rook) || piece.is_a?(Queen)
           score += (7 - piece.pos[0]) ** 2
 
@@ -109,7 +110,7 @@ class Evaluator
         end
       end
     else
-      board.pieces(:black).each do |piece|
+      board.pieces_for(:black).each do |piece|
         if piece.is_a?(Rook) || piece.is_a?(Queen)
           score += (piece.pos[0] - 0) ** 2
 
@@ -127,7 +128,7 @@ class Evaluator
     score = 0
 
     if color === :white
-      board.pieces(:white).each do |piece|
+      board.pieces_for(:white).each do |piece|
         if piece.is_a?(Knight) || piece.is_a?(Bishop)
           score += (7 - piece.pos[0]) ** 2
 
@@ -137,7 +138,7 @@ class Evaluator
         end
       end
     else
-      board.pieces(:black).each do |piece|
+      board.pieces_for(:black).each do |piece|
         if piece.is_a?(Knight) || piece.is_a?(Bishop)
           score += (piece.pos[0] - 0) ** 2
 
@@ -152,16 +153,19 @@ class Evaluator
   end
 
   def rook_correction
+    # When all moves are of equal value, the ComputerPlayer usually
+    # moves the Rook back and forth pointlessly. This method tries
+    # to prevent this.
     score = 0
 
     if color === :white
-      board.pieces(:white).each do |piece|
+      board.pieces_for(:white).each do |piece|
         if piece.is_a?(Rook)
           score -= 10 if piece.pos == [6, 6]
         end
       end
     else
-      board.pieces(:black).each do |piece|
+      board.pieces_for(:black).each do |piece|
         if piece.is_a?(Rook)
           score -= 10 if piece.pos == [0, 1]
         end
@@ -169,6 +173,16 @@ class Evaluator
     end
 
     (score).ceil
+  end
+
+  def checkmate_value
+    return 0 if board.turn_count < 20
+
+    if board.checkmate_for?(color)
+      return 100_000
+    else
+      return 0
+    end
   end
 
   def opponent_color(color)

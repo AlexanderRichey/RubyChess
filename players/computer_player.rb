@@ -14,7 +14,7 @@ class ComputerPlayer
     black: 1
   }
 
-  MAX_DEPTH = 1
+  MAX_DEPTH = 1 # Can only be odd numbers!
 
   def initialize(display, color)
     @board = display.board
@@ -107,13 +107,13 @@ class ComputerPlayer
         start_pos = piece.pos
         end_piece = board_node[end_pos]
 
-        board_node.make_move(start_pos, end_pos, start_piece)
+        board_node.make_move!(start_pos, end_pos, start_piece)
 
-        if end_piece.is_a?(Piece) && capture == false
-          capture = true
-        else
-          capture = false
-        end
+        # if end_piece.is_a?(Piece) && capture == false
+        #   capture = true
+        # else
+        #   capture = false
+        # end
 
         evaluation = negamax(
           board_node,
@@ -124,7 +124,7 @@ class ComputerPlayer
           capture
         )
 
-        board_node.undo_move(start_pos, end_pos, start_piece, end_piece)
+        board_node.undo_move!(start_pos, end_pos, start_piece, end_piece)
 
         STATS[:counter] += 1
 
