@@ -108,7 +108,7 @@ class Board
   end
 
   def checkmate_for?(color)
-    self.checkmate? && pieces_for(color).none? { |piece| piece.is_a?(King) }
+    valid_moves(color).values.flatten.empty?
   end
 
   def in_bounds?(pos)
