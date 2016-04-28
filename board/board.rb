@@ -141,6 +141,16 @@ class Board
     moves
   end
 
+  def valid_nonlegal_moves(color)
+    moves = Hash.new { Array.new }
+
+    pieces_for(color).each do |piece|
+      moves[piece] = piece.valid_moves
+    end
+
+    moves
+  end
+
   def capture_moves(color)
     capture_moves = Hash.new { Array.new }
 

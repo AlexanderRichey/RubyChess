@@ -18,7 +18,7 @@ class Evaluator
       alpha = stand_pat
     end
 
-    board.capture_moves(color).each do |piece, moves|
+    board.capture_moves(opponent_color(color)).each do |piece, moves|
       moves.each do |end_pos|
         start_pos = piece.pos
         start_piece = piece

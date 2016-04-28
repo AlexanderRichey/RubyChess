@@ -13,4 +13,7 @@ class HumanPlayer
   def to_s
     @color.to_s
   end
+
+  def stats
+  end
 end

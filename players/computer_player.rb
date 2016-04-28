@@ -109,7 +109,7 @@ class ComputerPlayer
 
     node = nil
 
-    board_node.valid_moves(sign_to_sym(sign)).each do |piece, moves|
+    board_node.valid_nonlegal_moves(sign_to_sym(sign)).each do |piece, moves|
       moves.each do |end_pos|
         start_piece = piece
         start_pos = piece.pos
