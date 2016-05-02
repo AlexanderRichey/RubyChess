@@ -9,24 +9,10 @@ class ComputerPlayer
     turn: 0
   }
 
-  SIGN = {
-    white: -1,
-    black: 1
-  }
-
-  def initialize(display, color, mode)
+  def initialize(display, color)
     @board = display.board
     @color = color
-    @max_depth = mode_parse(mode) # Can only be odd numbers
-  end
-
-  def mode_parse(mode)
-    case mode
-    when 'h'
-      return 3
-    when 'e'
-      return 1
-    end
+    @max_depth = 2
   end
 
   def to_s
@@ -45,21 +31,13 @@ class ComputerPlayer
     if STATS[:turn] == 1
       best_move = first_move
     else
-      best_move = negamax(
-        board,
-        0,
-        SIGN[color],
-        -Float::INFINITY,
-        Float::INFINITY,
-        false
-      )
+      best_move = choose_best_move
     end
 
     STATS[:end_time] = Time.now
     STATS[:diff] = STATS[:end_time] - STATS[:start_time]
 
     board.move(best_move[:start_pos], best_move[:end_pos])
-
     prc.call
   end
 
@@ -72,44 +50,58 @@ class ComputerPlayer
     end
   end
 
-  def log_score!(score) #for debugging
-    File.open('log.txt', 'a') do |log|
-      log.puts "Eval ##{STATS[:counter]} => #{score}"
-    end
-  end
+  def choose_best_move
+    move_scores = Hash.new { |piece, moves| piece[moves] = [] }
 
-  def log_board_score!(score) #for debugging
-    File.open('log.txt', 'a') do |log|
-      log.puts "Board Score => #{score}"
-    end
+    board.valid_moves(color).each do |piece, moves|
+      moves.each do |end_pos|
+        start_piece = piece
+        start_pos = piece.pos
+        end_piece = board[end_pos]
 
-    score
-  end
+        board.make_move!(start_pos, end_pos, start_piece)
 
-  def log_stats!(score) #for debugging
-    File.open('log.txt', 'a') do |log|
-      log.puts stats
-      log.puts "The winning score was #{score}."
-    end
-  end
+        score = negamax(
+          board,
+          0,
+          flip_color(color),
+          -Float::INFINITY,
+          Float::INFINITY
+        )
 
-  def sign_to_sym(sign)
-    inverse_sign_map = {
-      :"-1" => :white,
-      :"1" => :black
-    }
+        board.undo_move!(start_pos, end_pos, start_piece, end_piece)
 
-    inverse_sign_map[sign.to_s.to_sym]
-  end
-
-  def negamax(board_node, depth, sign, alpha, beta, capture)
-    if depth > max_depth && !capture
-      return sign * board_node.score(sign_to_sym(sign), alpha, beta)
+        move_scores[piece].push({ end_pos: end_pos, score: score })
+      end
     end
 
-    node = nil
+    highest_scoring_move(move_scores)
+  end
 
-    board_node.valid_nonlegal_moves(sign_to_sym(sign)).each do |piece, moves|
+  def highest_scoring_move(move_score_hash)
+    high_score = nil
+    best_start_pos = nil
+    best_end_pos = nil
+
+    move_score_hash.each do |piece, moves|
+      moves.each do |move_hash|
+        if high_score.nil? || move_hash[:score] > high_score
+          high_score = move_hash[:score]
+          best_start_pos = piece.pos
+          best_end_pos = move_hash[:end_pos]
+        end
+      end
+    end
+
+    { start_pos: best_start_pos, end_pos: best_end_pos }
+  end
+
+  def negamax(board_node, depth, cur_color, alpha, beta)
+    if depth == max_depth
+      return board_node.score(flip_color(cur_color))
+    end
+
+    board_node.valid_nonlegal_moves(cur_color).each do |piece, moves|
       moves.each do |end_pos|
         start_piece = piece
         start_pos = piece.pos
@@ -117,53 +109,34 @@ class ComputerPlayer
 
         board_node.make_move!(start_pos, end_pos, start_piece)
 
-        # Search one layer deeper if capture
-        # if end_piece.is_a?(Piece) && capture == false
-        #   capture = true
-        # else
-        #   capture = false
-        # end
-
-        evaluation = negamax(
+        score = -negamax(
           board_node,
           depth + 1,
-          sign * -1,
-          beta * -1,
-          alpha * -1,
-          capture
+          flip_color(cur_color),
+          -beta,
+          -alpha
         )
 
         board_node.undo_move!(start_pos, end_pos, start_piece, end_piece)
 
         STATS[:counter] += 1
 
-        if evaluation.is_a?(Hash)
-          score = evaluation[:score] * -1
-        else
-          score = evaluation * -1
-        end
-
         if score >= beta
-          return {
-              score: beta,
-              start_pos: start_pos,
-              end_pos: end_pos
-            }
+          return beta
         end
 
         if score > alpha
           alpha = score
-          node = {
-            score: alpha,
-            start_pos: start_pos,
-            end_pos: end_pos
-          }
         end
 
       end
     end
 
-    return node || alpha
+    return alpha
+  end
+
+  def flip_color(color)
+    color == :white ? :black : :white
   end
 
 end

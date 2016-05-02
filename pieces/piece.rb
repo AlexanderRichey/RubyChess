@@ -24,6 +24,10 @@ class Piece
     end
   end
 
+  def inspect
+    "#{self.color} #{self.class}"
+  end
+
   protected
 
   def opponent_color

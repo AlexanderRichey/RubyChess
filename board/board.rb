@@ -32,7 +32,7 @@ class Board
       raise BoardError.new("Invalid move.")
     end
 
-    validate_move!(start_pos, end_pos, true)
+    validate_move!(start_pos, end_pos)
     make_move!(start_pos, end_pos, self[start_pos])
     @turn_count += 1
   end
@@ -154,7 +154,7 @@ class Board
   def capture_moves(color)
     capture_moves = Hash.new { Array.new }
 
-    valid_moves(color).each do |piece, moves|
+    valid_nonlegal_moves(color).each do |piece, moves|
       capture_moves[piece] = moves.select do |end_pos|
         capture?(piece.pos, end_pos)
       end
@@ -173,8 +173,12 @@ class Board
     end
   end
 
-  def score(color, alpha, beta)
-    Evaluator.new(self, color).quiesce(alpha, beta)
+  def score(color)
+    Evaluator.new(self, color).score
+  end
+
+  def end_game_score(color)
+    Evaluator.new(self, color).end_game_score
   end
 
   def make_move!(start_pos, end_pos, piece)
@@ -207,8 +211,18 @@ class Board
     self
   end
 
+  def legal_move?(start_pos, end_pos)
+    begin
+      validate_move!(start_pos, end_pos)
+    rescue BoardError
+      return false
+    end
+
+    true
+  end
+
   private
-  def validate_move!(start_pos, end_pos, just_checking = false)
+  def validate_move!(start_pos, end_pos)
     start_piece = self[start_pos]
     end_piece = self[end_pos]
     color = start_piece.color
@@ -216,31 +230,14 @@ class Board
 
     make_move!(start_pos, end_pos, start_piece)
 
-    if in_check?(color)
-      undo_move!(start_pos, end_pos, start_piece, end_piece)
-
-      if currently_in_check
-        raise BoardError.new("Must move out of check.")
-      else
-        raise BoardError.new("Can't move into check.")
-      end
+    if in_check?(color) && currently_in_check
+      e = BoardError.new("You must move out of check.")
+    elsif in_check?(color)
+      e = BoardError.new("You may not move into check.")
     end
 
-    if just_checking
-      undo_move!(start_pos, end_pos, start_piece, end_piece)
-    end
-
-    false
-  end
-
-  def legal_move?(start_pos, end_pos)
-    begin
-      validate_move!(start_pos, end_pos, true)
-    rescue BoardError
-      return false
-    end
-
-    true
+    undo_move!(start_pos, end_pos, start_piece, end_piece)
+    raise e if e
   end
 
   def all_valid_end_positions

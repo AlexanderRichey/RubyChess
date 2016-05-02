@@ -4,12 +4,12 @@ require 'byebug'
 class Game
   attr_reader :current_player, :player_one, :player_two
 
-  def initialize(mode, board = nil)
+  def initialize(board = nil)
     @board = board || Board.new(self).populate_board!
     @display = Display.new(self, @board)
 
-    @player_one = HumanPlayer.new(@display, :white)
-    @player_two = ComputerPlayer.new(@display, :black, mode)
+    @player_one = ComputerPlayer.new(@display, :white)
+    @player_two = HumanPlayer.new(@display, :black)
 
     @current_player = player_one
   end
@@ -46,14 +46,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   if ARGV[0].nil?
-    puts  "CHESS \n" +
-          "Choose a difficulty level. Type 'e'\n" +
-          "for easy (AI makes moves in <1 second)\n" +
-          "or 'h' for hard (AI takes as long as\n" +
-          "three minutes to move). Then press 'enter'."
-
-    mode = gets.chomp
-    g = Game.new(mode)
+    g = Game.new
     g.run
   else
     file = File.read(ARGV[0])

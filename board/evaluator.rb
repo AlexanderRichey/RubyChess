@@ -1,65 +1,39 @@
 class Evaluator
   def initialize(board, color)
     @board, @color = board, color
+
+    @black_pieces = board.pieces_for(:black)
+    @white_pieces = board.pieces_for(:white)
+
+    @my_pieces = color == :white ? @white_pieces : @black_pieces
+    @opponents_pieces = color == :white ? @black_pieces : @white_pieces
   end
 
   attr_reader :board, :color
 
-  START_VALUE = 39
+  START_VALUE = 139
 
-  def quiesce(alpha, beta)
-    stand_pat = self.evaluate
-
-    if stand_pat >= beta
-      return beta
-    end
-
-    if alpha < stand_pat
-      alpha = stand_pat
-    end
-
-    board.capture_moves(opponent_color(color)).each do |piece, moves|
-      moves.each do |end_pos|
-        start_pos = piece.pos
-        start_piece = piece
-        end_piece = board[end_pos]
-        board.make_move!(start_pos, end_pos, start_piece)
-
-        score = -quiesce(-beta, -alpha)
-
-        board.undo_move!(start_pos, end_pos, start_piece, end_piece)
-
-        if score >= beta
-          return beta
-        end
-
-        if score > alpha
-          alpha = score
-        end
-
-      end
-    end
-
-    return alpha
+  def score
+    material_value +
+    pawn_development_value +
+    minor_piece_development_value +
+    major_piece_development_value
   end
 
-  def evaluate
+  def end_game_score
     material_value +
-    pawn_advancement_value +
-    minor_piece_advancement_value +
-    major_piece_advancement_value +
-    rook_correction +
     checkmate_value
   end
 
+  private
   def material_value
     score = 0
-    board.pieces_for(color).each do |piece|
+    @my_pieces.each do |piece|
       score += piece.value
     end
 
     opp_score = 0
-    board.pieces_for(opponent_color(color)).each do |piece|
+    @opponents_pieces.each do |piece|
       opp_score += piece.value
     end
 
@@ -68,121 +42,144 @@ class Evaluator
     score + opp_diff
   end
 
-  def pawn_advancement_value
-    score = 0
-
-    if color === :white
-      board.pieces_for(:white).each do |piece|
-        if piece.is_a?(Pawn)
-          score += (6 - piece.pos[0]) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    else
-      board.pieces_for(:black).each do |piece|
-        if piece.is_a?(Pawn)
-          score += (piece.pos[0] - 1) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    end
-
-    (score / 20).ceil
+  def pawn_development_value
+    color == :white ? white_pawn_value : black_pawn_value
   end
 
-  def major_piece_advancement_value
-    score = 0
-
-    if color === :white
-      board.pieces_for(:white).each do |piece|
-        if piece.is_a?(Rook) || piece.is_a?(Queen)
-          score += (7 - piece.pos[0]) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    else
-      board.pieces_for(:black).each do |piece|
-        if piece.is_a?(Rook) || piece.is_a?(Queen)
-          score += (piece.pos[0] - 0) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    end
-
-    (score / 40).ceil
+  def minor_piece_development_value
+    color == :white ? white_minor_value : black_minor_value
   end
 
-  def minor_piece_advancement_value
-    score = 0
-
-    if color === :white
-      board.pieces_for(:white).each do |piece|
-        if piece.is_a?(Knight) || piece.is_a?(Bishop)
-          score += (7 - piece.pos[0]) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    else
-      board.pieces_for(:black).each do |piece|
-        if piece.is_a?(Knight) || piece.is_a?(Bishop)
-          score += (piece.pos[0] - 0) ** 2
-
-          if (3..6).include?(piece.pos[1]) #center bonus
-            score *= 2
-          end
-        end
-      end
-    end
-
-    (score / 30).ceil
+  def major_piece_development_value
+    color == :white ? white_major_value : black_major_value
   end
 
-  def rook_correction
-    # When all moves are of equal value, the ComputerPlayer usually
-    # moves the Rook back and forth pointlessly. This method tries
-    # to prevent this.
+  def black_pawn_value
     score = 0
 
-    if color === :white
-      board.pieces_for(:white).each do |piece|
-        if piece.is_a?(Rook)
-          score -= 10 if piece.pos == [6, 6]
-        end
-      end
-    else
-      board.pieces_for(:black).each do |piece|
-        if piece.is_a?(Rook)
-          score -= 10 if piece.pos == [0, 1]
-        end
-      end
+    @black_pieces.select { |piece| piece.is_a?(Pawn) }.each do |pawn|
+      score += (((pawn.pos[0] - 1).abs ** 2))
     end
 
-    (score).ceil
+    score.ceil
+  end
+
+  def white_pawn_value
+    score = 0
+
+    @white_pieces.select { |piece| piece.is_a?(Pawn) }.each do |pawn|
+      score += (((pawn.pos[0] - 6).abs ** 2))
+    end
+
+    score.ceil
+  end
+
+  def black_minor_value
+    score = 0
+
+    black_minor_pieces.each do |minor_piece|
+      score += (((minor_piece.pos[0]).abs ** 2))
+    end
+
+    score.ceil
+  end
+
+  def white_minor_value
+    score = 0
+
+    white_minor_pieces.each do |minor_piece|
+      score += (((minor_piece.pos[0] - 7).abs ** 2))
+    end
+
+    score.ceil
+  end
+
+  def black_major_value
+    score = 0
+
+    black_major_pieces.each do |major_piece|
+      score += (((major_piece.pos[0]).abs ** 2))
+    end
+
+    score.ceil
+  end
+
+  def white_major_value
+    score = 0
+
+    white_major_pieces.each do |major_piece|
+      score += (((major_piece.pos[0] - 7).abs ** 2))
+    end
+
+    score.ceil
   end
 
   def checkmate_value
-    return 0 if board.turn_count < 20
-
-    if board.checkmate_for?(color)
-      return 100_000
+    if @opponents_pieces.none? { |piece| piece.is_a?(King) }
+     return 100_000
     else
-      return 0
+     return 0
     end
+  end
+
+  def minor_piece?(piece)
+    piece.is_a?(Knight) || piece.is_a?(Bishop)
+  end
+
+  def major_piece?(piece)
+    piece.is_a?(Rook) || piece.is_a?(Queen)
+  end
+
+  def white_minor_pieces
+    @white_pieces.select { |piece| minor_piece?(piece) }
+  end
+
+  def white_major_pieces
+    @white_pieces.select { |piece| major_piece?(piece) }
+  end
+
+  def black_minor_pieces
+    @black_pieces.select { |piece| minor_piece?(piece) }
+  end
+
+  def black_major_pieces
+    @black_pieces.select { |piece| major_piece?(piece) }
+  end
+
+  def valid_nonlegal_moves(color)
+    color == :white ? white_nonlegal_moves : black_nonlegal_moves
+  end
+
+  def white_nonlegal_moves
+    moves = Hash.new { Array.new }
+
+    @white_pieces.each do |piece|
+      moves[piece] = piece.valid_moves
+    end
+
+    moves
+  end
+
+  def black_nonlegal_moves
+    moves = Hash.new { Array.new }
+
+    @black_pieces.each do |piece|
+      moves[piece] = piece.valid_moves
+    end
+
+    moves
+  end
+
+  def capture_moves(color)
+    capture_moves = Hash.new { Array.new }
+
+    valid_nonlegal_moves(color).each do |piece, moves|
+      capture_moves[piece] = moves.select do |end_pos|
+        board.capture?(piece.pos, end_pos)
+      end
+    end
+
+    capture_moves
   end
 
   def opponent_color(color)
