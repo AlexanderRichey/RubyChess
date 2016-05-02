@@ -8,8 +8,8 @@ class Game
     @board = board || Board.new(self).populate_board!
     @display = Display.new(self, @board)
 
-    @player_one = ComputerPlayer.new(@display, :white)
-    @player_two = HumanPlayer.new(@display, :black)
+    @player_one = HumanPlayer.new(@display, :white)
+    @player_two = ComputerPlayer.new(@display, :black)
 
     @current_player = player_one
   end

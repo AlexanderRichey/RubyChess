@@ -7,6 +7,13 @@ class Evaluator
 
     @my_pieces = color == :white ? @white_pieces : @black_pieces
     @opponents_pieces = color == :white ? @black_pieces : @white_pieces
+
+    @pawn =
+      Proc.new { |piece| piece.is_a?(Pawn) }
+    @major_piece =
+      Proc.new { |piece| piece.is_a?(Rook) || piece.is_a?(Queen) }
+    @minor_piece =
+      Proc.new { |piece| piece.is_a?(Knight) || piece.is_a?(Bishop) }
   end
 
   attr_reader :board, :color
@@ -57,7 +64,7 @@ class Evaluator
   def black_pawn_value
     score = 0
 
-    @black_pieces.select { |piece| piece.is_a?(Pawn) }.each do |pawn|
+    @black_pieces.select(&@pawn).each do |pawn|
       score += (((pawn.pos[0] - 1).abs ** 2))
     end
 
@@ -67,7 +74,7 @@ class Evaluator
   def white_pawn_value
     score = 0
 
-    @white_pieces.select { |piece| piece.is_a?(Pawn) }.each do |pawn|
+    @white_pieces.select(&@pawn).each do |pawn|
       score += (((pawn.pos[0] - 6).abs ** 2))
     end
 
@@ -77,7 +84,7 @@ class Evaluator
   def black_minor_value
     score = 0
 
-    black_minor_pieces.each do |minor_piece|
+    @black_pieces.select(&@minor_piece).each do |minor_piece|
       score += (((minor_piece.pos[0]).abs ** 2))
     end
 
@@ -87,7 +94,7 @@ class Evaluator
   def white_minor_value
     score = 0
 
-    white_minor_pieces.each do |minor_piece|
+    @white_pieces.select(&@minor_piece).each do |minor_piece|
       score += (((minor_piece.pos[0] - 7).abs ** 2))
     end
 
@@ -97,7 +104,7 @@ class Evaluator
   def black_major_value
     score = 0
 
-    black_major_pieces.each do |major_piece|
+    @black_pieces.select(&@major_piece).each do |major_piece|
       score += (((major_piece.pos[0]).abs ** 2))
     end
 
@@ -107,7 +114,7 @@ class Evaluator
   def white_major_value
     score = 0
 
-    white_major_pieces.each do |major_piece|
+    @white_pieces.select(&@major_piece).each do |major_piece|
       score += (((major_piece.pos[0] - 7).abs ** 2))
     end
 
@@ -120,30 +127,6 @@ class Evaluator
     else
      return 0
     end
-  end
-
-  def minor_piece?(piece)
-    piece.is_a?(Knight) || piece.is_a?(Bishop)
-  end
-
-  def major_piece?(piece)
-    piece.is_a?(Rook) || piece.is_a?(Queen)
-  end
-
-  def white_minor_pieces
-    @white_pieces.select { |piece| minor_piece?(piece) }
-  end
-
-  def white_major_pieces
-    @white_pieces.select { |piece| major_piece?(piece) }
-  end
-
-  def black_minor_pieces
-    @black_pieces.select { |piece| minor_piece?(piece) }
-  end
-
-  def black_major_pieces
-    @black_pieces.select { |piece| major_piece?(piece) }
   end
 
   def valid_nonlegal_moves(color)
